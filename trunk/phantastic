@@ -1,0 +1,31 @@
+#!/usr/bin/env php
+
+<?php
+
+
+include('lib/phpmarkdown/markdown.php');
+
+//TODO: Créer une classe s’occupant des URL
+include_once('class/Parser.php');
+include_once('class/Config.php');
+include_once('class/File.php');
+include_once('class/Tag.php');
+include_once('class/Category.php');
+include_once('class/History.php');
+include_once('class/Template.php');
+include_once('class/Generator.php');
+include_once('class/Options.php');
+include_once('class/Arg.php');
+include_once('class/Server.php');
+include_once('class/App.php');
+
+
+//var_dump(__DIR__);
+
+$phantastic = new Malenki\Phantastic\App();
+$phantastic->setOpt();
+$phantastic->getOpt();
+$phantastic->run();
+
+
+

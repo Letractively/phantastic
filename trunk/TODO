@@ -1,0 +1,14 @@
+    * Support de "published" dans le YAML Front Matter
+    * Support des categories/sous categories
+    * Support du multilinguisme
+    * Faire le lien Option/fonctionnalité
+    * Utiliser des systèmes de template optionnels
+      (http://www.greaterscope.net/projects/Vemplator
+      http://www.h2o-template.org/ http://www.raintpl.com/Download/)
+    * Inclure un mécanisme de téléchargement et installation simple de
+      l’interpréteur YAML de Symphony.
+    * Coder un système permettant d’avoir une réduction de la taille du code généré
+    * Inclure un système de suggestion d’article
+    * Définir un système de log à la fois pour le résultat du rendu comme pour
+      l’intéraction avec l’utilisateur.
+    * Profiter des fonctionnalités serveur de PHP 5.4
