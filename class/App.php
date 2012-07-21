@@ -1,0 +1,148 @@
+<?php
+
+namespace Malenki\Phantastic;
+
+use Malenki\Opt\Options as Options;
+use Malenki\Opt\Arg as Arg;
+
+class App
+{
+    public function setOpt()
+    {
+
+        Options::add(
+            Arg::createValue('source')
+            ->setShort('s:')
+            ->setLong('source:')
+            ->setHelp('Le dossier contenant les fichiers à traiter.')
+            ->setVarHelp('DIR')
+        );
+
+        Options::add(
+            Arg::createValue('destination')
+            ->setShort('d:')
+            ->setLong('destination:')
+            ->setHelp('Le dossier dans lequel seront créés les fichiers.')
+            ->setVarHelp('DIR')
+        );
+
+        Options::add(
+            Arg::createValue('baseurl')
+            ->setShort('b:')
+            ->setLong('baseurl:')
+            ->setHelp('URL de base utilisé pour le site généré. Cette valeur n’est pas utilisée si l’option « server » est choisie.')
+            ->setVarHelp('BASE_URL')
+        );
+
+        Options::add(
+            Arg::createValue('config')
+            ->setShort('c::')
+            ->setLong('config::')
+            ->setHelp('Fichier de configuration contenant différentes valeurs sous forme d’un fichier YAML. Si FICHIER n’est pas spécifié, alors un fichier « config.yaml » sera lu par défaut, mais s’il n’existe pas, déclenchera une erreur.')
+            ->setVarHelp('FICHIER')
+        );
+
+        Options::add(
+            Arg::createSwitch('minimize')
+            ->setLong('minimize')
+            ->setHelp('Réduit la taille des fichiers générés.')
+        );
+
+        Options::add(
+            Arg::createValue('timezone')
+            ->setLong('timezone:')
+            //TODO: Être plus bavard là…
+            ->setHelp('Fuseau horaire TZ à utiliser pour les dates, comme par exemple « Europe/Paris ». La valeur utilisée par défaut est « UTC ».')
+            ->setVarHelp('TZ')
+        );
+        
+        Options::add(
+            Arg::createValue('server')
+            ->setLong('server::')
+            ->setHelp('Fait un rendu et lance un serveur web de test à l’adresse ADR:PORT. Si l’adresse n’est pas précisée, alors « localhost:8080 » sera prise. Si l’option « baseurl » est précisée, elle sera ignorée.')
+            ->setVarHelp('ADR:PORT')
+        );
+
+
+        Options::getInstance()->setHelp('Affiche ce message d’aide.');
+        Options::getInstance()->setVersion('Affiche la version de Phantastic.');
+    }
+
+    public function getOpt()
+    {
+        // OK, on interpète ce qu’on a en ligne de commande et on détermine quoi faire…
+        Options::getInstance()->parse();
+
+        if(Options::getInstance()->has('version'))
+        {
+            printf("\nPHANTASTIC Version 0.1\n\n");
+            exit();
+        }
+
+        if(Options::getInstance()->has('help'))
+        {
+            Options::getInstance()->displayHelp();
+        }
+
+        if(Options::getInstance()->has('config'))
+        {
+            $str_config_file = 'config.yaml';
+
+            if(Options::getInstance()->get('config'))
+            {
+                $str_config_file = Options::getInstance()->get('config');
+            }
+
+
+            if(is_readable($str_config_file))
+            {
+                Config::getInstanceWithConfigFile($str_config_file);
+            }
+
+        }
+        else
+        {
+            if(Options::getInstance()->has('timezone'))
+            {
+                Config::getInstance()->setTimezone($opt->get('timezone'));
+            }
+            
+            
+            if(Options::getInstance()->has('server'))
+            {
+                Config::getInstance()->setServer($opt->get('server'));
+            }
+        }
+    }
+
+
+
+
+    public function run()
+    {
+        date_default_timezone_set(Config::getInstance()->getTimezone());
+
+        //var_dump(Config::getInstance());
+        $g = new Generator(
+            Config::getInstance()->getDir()->src,
+            Config::getInstance()->getDir()->dest
+        );
+        $g->getData();
+        $g->render();
+        $g->renderTagPages();
+        //Ce qui suit n’a aucun intérêt car les catégories font parties intégrantes des 
+        //fichiers.
+        //$g->renderCategoryPages();
+
+        //debug, test…
+        //var_dump(History::getLast());
+
+        if(Config::getInstance()->getServer())
+        {
+            $s = new Server();
+            $s->setHost(Config::getInstance()->getServer());
+            $s->run();
+        }
+    }
+}
+
