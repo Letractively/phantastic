@@ -1,7 +1,6 @@
     * Support de "published" dans le YAML Front Matter
     * Support des categories/sous categories
     * Support du multilinguisme
-    * Faire le lien Option/fonctionnalité
     * Utiliser des systèmes de template optionnels
       (http://www.greaterscope.net/projects/Vemplator
       http://www.h2o-template.org/ http://www.raintpl.com/Download/)
@@ -11,4 +10,6 @@
     * Inclure un système de suggestion d’article
     * Définir un système de log à la fois pour le résultat du rendu comme pour
       l’intéraction avec l’utilisateur.
-    * Profiter des fonctionnalités serveur de PHP 5.4
+    * Avoir un système permettant de créer un fichier config de base que
+      l’utilisateur peut modifier facilement ensuite.
+    * Avoir un thème de base pour démarer.
