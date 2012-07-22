@@ -29,6 +29,30 @@ namespace Malenki\Phantastic;
  */
 class Path
 {
+    public static function getSrcPost()
+    {
+        return sprintf(
+            '%s%s',
+            Config::getInstance()->getDir()->src,
+            Config::getInstance()->getDir()->post
+        );
+    }
+
+    public static function getSrc()
+    {
+        return Config::getInstance()->getDir()->src;
+    }
+    
+    public static function getDest()
+    {
+        return Config::getInstance()->getDir()->dest;
+    }
+    
+    public static function getTemplate()
+    {
+        return Config::getInstance()->getDir()->template;
+    }
+
     //TODO: À améliorer, il manque pleins de caractères des langues européennes.
     public static function createSlug($str)
     {
@@ -72,6 +96,13 @@ class Path
         $str = trim($str, '-');
 
         return $str;	
+    }
+
+
+    public static function findCategoryFor(File $file)
+    {
+        $key = preg_replace('@'.Path::getSrcPost().'@', '',$file->getObjPath()->getPath());
+        return Category::getHier($key);
     }
 
 }
