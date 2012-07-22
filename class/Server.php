@@ -22,7 +22,7 @@ namespace Malenki\Phantastic;
 class Server
 {
     const EXEC_PHP = 'php -S %s -t %s';
-    const EXEC_PYTHON = 'python -m SimpleHTTPServer %s';
+    const EXEC_PYTHON = 'cd %s && python -m SimpleHTTPServer %s; cd -';
 
     public static function hasInternalServer()
     {
@@ -36,10 +36,14 @@ class Server
 
     public function run()
     {
-        //TODO: S’occuper de l’alternative Python : comment spécifier le répertoire ?
         if(self::hasInternalServer())
         {
             system(sprintf(self::EXEC_PHP, $this->str_host, Config::getInstance()->getDir()->dest));
+        }
+        else
+        {
+            $str_port = array_pop(explode(':', $this->str_host));
+            system(sprintf(self::EXEC_PYTHON, Config::getInstance()->getDir()->dest, $str_port));
         }
     }
 }
