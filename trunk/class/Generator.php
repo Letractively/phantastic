@@ -33,11 +33,11 @@ class Generator
     protected $str_dest = array();
     protected $str_tag_cloud = null;
 
-    public function __construct($src = Config::PATH_SRC, $dest = Config::PATH_DEST)
+    public function __construct()
     {
-        $this->str_src = $src;
-        $this->str_dest = $dest;
-        Tag::setBasePath(Config::PATH_TAGS);
+        $this->str_src = Config::getInstance()->getDir()->src;
+        $this->str_dest = Config::getInstance()->getDir()->dest;
+        Tag::setBasePath(Config::PATH_TAGS); //TODO: ne doit pas être en dur!!!
     }
 
 
@@ -126,9 +126,6 @@ class Generator
             }
             else
             {
-                if(!file_exists(dirname($f->getDestPath()))){
-                    mkdir(dirname($f->getDestPath()), 0755, true);
-                }
                 copy($f->getSrcPath(), $str_dest);
             }
         }
