@@ -62,9 +62,16 @@ class Category
 
     }
 
-    public static function getHier()
+    public static function getHier($key = null)
     {
-        return self::$arr_hier;
+        if(is_null($key))
+        {
+            return self::$arr_hier;
+        }
+        else
+        {
+            return self::$arr_hier[$key];
+        }
     }
 
     public static function set($str_path)
@@ -128,9 +135,20 @@ class Category
         return $this->arr_ids;
     }
 
+    /**
+     * Retourne le slug propre à cette catégorie 
+     * 
+     * @access public
+     * @return string
+     */
     public function getSlug()
     {
-        return implode('/', $this->arr_node);
+        if(is_null($this->str_slug))
+        {
+            $this->str_slug = implode('/', $this->arr_node);
+        }
+
+        return $this->str_slug;
     }
 
 }

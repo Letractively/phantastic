@@ -24,6 +24,7 @@ use DateTimeZone;
 
 class Config
 {
+    //TODO: Déplacer ça dans la classe Path
     const PATH_SRC = 'src/';
     const PATH_DEST = 'out/';
     const PATH_POST = 'post/';

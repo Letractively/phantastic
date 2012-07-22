@@ -109,18 +109,15 @@ class File
         return Path::createSlug($this->getHeader()->title);
     }
 
-    public function getCitySlug()
-    {
-        return Path::createSlug($this->getHeader()->city);
-    }
-
 
     public function getUrl()
     {
         if($this->isPost())
         {
             //TODO: Mettre à jour pour les catégories
-            return sprintf(self::PERMALINK_POST, $this->getCitySlug(), $this->getTitleSlug());
+            //var_dump(Path::findCategoryFor($this));
+            //var_dump($this->getTitleSlug());
+            return sprintf(self::PERMALINK_POST, Path::findCategoryFor($this)->getSlug(), $this->getTitleSlug());
         }
         else if($this->isPage())
         {
@@ -151,6 +148,10 @@ class File
     public function getSrcPath()
     {
         return $this->obj_path->getPathName();
+    }
+    public function getObjPath()
+    {
+        return $this->obj_path;
     }
 
     public function getDestPath()
