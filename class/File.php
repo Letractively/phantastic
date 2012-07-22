@@ -49,50 +49,6 @@ class File
     }
 
 
-    //TODO: À améliorer
-    public static function createSlug($str)
-    {
-        // to lower case
-        $str = mb_strtolower($str, 'UTF-8');
-
-        // Remove diacritics
-        $arr_prov = array(
-            'á' => 'a',
-            'à' => 'a',
-            'â' => 'a',
-            'ä' => 'a',
-            'é' => 'e',
-            'è' => 'e',
-            'ë' => 'e',
-            'ê' => 'e',
-            'í' => 'i',
-            'ì' => 'i',
-            'ï' => 'i',
-            'î' => 'i',
-            'ò' => 'o',
-            'ó' => 'o',
-            'ö' => 'o',
-            'ô' => 'o',
-            'ý' => 'y',
-            'ỳ' => 'y',
-            'ÿ' => 'y',
-            'ŷ' => 'y',
-
-            'ç' => 'c',
-            'œ' => 'oe'
-        );
-        
-        foreach($arr_prov as $k => $v)
-        {
-            $str = preg_replace(sprintf('/%s/', $k), $v, $str);
-        }
-
-        // Remove spaces and other stuffs
-        $str = preg_replace('/[^a-z]+/', '-', trim($str));
-        $str = trim($str, '-');
-
-        return $str;	
-    }
 
     public function __construct($path)
     {
@@ -135,6 +91,14 @@ class File
         return ($this->hasHeader() && !$this->isPost());
     }
 
+    /**
+     * Détermine si le fichier est un fichier à interpréter ou non.
+     *
+     * Détermine si le fichier est un post ou une page. 
+     * 
+     * @access public
+     * @return boolean
+     */
     public function isFile()
     {
         return(!$this->isPost() && !$this->isPage());
@@ -142,12 +106,12 @@ class File
 
     public function getTitleSlug()
     {
-        return self::createSlug($this->getHeader()->title);
+        return Path::createSlug($this->getHeader()->title);
     }
 
     public function getCitySlug()
     {
-        return self::createSlug($this->getHeader()->city);
+        return Path::createSlug($this->getHeader()->city);
     }
 
 
@@ -166,7 +130,7 @@ class File
             }
             else
             {
-                return self::createSlug($this->getHeader()->title);
+                return Path::createSlug($this->getHeader()->title);
             }
         }
         else
