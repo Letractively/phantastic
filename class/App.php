@@ -138,14 +138,11 @@ class App
     {
         date_default_timezone_set(Config::getInstance()->getTimezone());
 
-        //var_dump(Config::getInstance());
-        $g = new Generator(
-            Config::getInstance()->getDir()->src,
-            Config::getInstance()->getDir()->dest
-        );
+        $g = new Generator();
         $g->getData();
         $g->render();
         $g->renderTagPages();
+
         //Ce qui suit n’a aucun intérêt car les catégories font parties intégrantes des 
         //fichiers.
         //TODO: Euh, en fait si :) Il faut mettre des pages au niveau des nœuds non finaux.
@@ -155,7 +152,6 @@ class App
         //var_dump(History::getLast());
 
 
-        //var_dump(Category::getHier());
 
         if(Config::getInstance()->getServer())
         {
