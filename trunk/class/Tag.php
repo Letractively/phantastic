@@ -155,7 +155,7 @@ class Tag
     {
         if(is_null($this->str_slug))
         {
-            $this->str_slug = self::$str_base_path . File::createSlug($this->str_name);
+            $this->str_slug = self::$str_base_path . Path::createSlug($this->str_name);
         }
 
         return $this->str_slug;
