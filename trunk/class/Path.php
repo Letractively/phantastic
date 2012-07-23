@@ -53,7 +53,6 @@ class Path
         return Config::getInstance()->getDir()->template;
     }
 
-    //TODO: À améliorer, il manque pleins de caractères des langues européennes.
     public static function createSlug($str)
     {
         // to lower case
@@ -61,31 +60,17 @@ class Path
 
         // Remove diacritics
         $arr_prov = array(
-            'á' => 'a',
-            'à' => 'a',
-            'â' => 'a',
-            'ä' => 'a',
-            'é' => 'e',
-            'è' => 'e',
-            'ë' => 'e',
-            'ê' => 'e',
-            'í' => 'i',
-            'ì' => 'i',
-            'ï' => 'i',
-            'î' => 'i',
-            'ò' => 'o',
-            'ó' => 'o',
-            'ö' => 'o',
-            'ô' => 'o',
-            'ý' => 'y',
-            'ỳ' => 'y',
-            'ÿ' => 'y',
-            'ŷ' => 'y',
-
-            'ç' => 'c',
-            'œ' => 'oe'
+            "é" => "e", "è" => "e", "ê" => "e", "ë" => "e", "ę" => "e", "ẽ" => "e", 'ě' => 'e', 
+            "á" => "a", "à" => "a", "â" => "a", "ä" => "a", "ą" => "a", "ã" => "a", "å" => "a", 'ǎ' => 'a', 'ã' => 'a',
+            "ó" => "o", "ò" => "o", "ô" => "o", "ö" => "o", "õ" => "o", 'ǒ' => 'o', 'ø' => 'o', 'õ' => 'o',
+            "í" => "i", "ì" => "i", "î" => "i", "ï" => "i", "ĩ" => "i", 'ǐ' => 'i',
+            "ú" => "u", "ù" => "u", "û" => "u", "ü" => "u", "ũ" => "u", "ů" => "u", 'ǔ' => 'u',
+            "ý" => "y", "ỳ" => "y", "ŷ" => "y", "ÿ" => "y", "ỹ" => "y",
+            "ç" => "c", "ñ" => "n", 'ł' => 'l', 'ð' => 'dh', 'þ' => 'th',
+            "œ" => "oe", "æ" => "ae", "ß" => "ss", 'ŀl' => 'll',
+                 
         );
-        
+       
         foreach($arr_prov as $k => $v)
         {
             $str = preg_replace(sprintf('/%s/', $k), $v, $str);
