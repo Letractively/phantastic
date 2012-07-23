@@ -23,8 +23,8 @@ use Malenki\Phantastic\Parser as Parser;
 
 class File
 {
-    const PERMALINK_POST = '%s/%s/';
-    const PERMALINK_TAG = 'tags/%s/';
+    const PERMALINK_POST = '%s/%s/'; //TODO: à dégager de là
+    const PERMALINK_TAG = 'tags/%s/'; //TODO: à dégager de là
 
     protected static $last_id = 0;
     protected $id = null;
@@ -109,73 +109,20 @@ class File
         return Path::createSlug($this->getHeader()->title);
     }
 
-
+    //TODO: Sera opérationnel en même temps que Path::url
     public function getUrl()
     {
-        if($this->isPost())
-        {
-            //TODO: Mettre à jour pour les catégories
-            //var_dump(Path::findCategoryFor($this));
-            //var_dump($this->getTitleSlug());
-            return sprintf(self::PERMALINK_POST, Path::findCategoryFor($this)->getSlug(), $this->getTitleSlug());
-        }
-        else if($this->isPage())
-        {
-            if(isset($this->getHeader()->permalink))
-            {
-                return $this->getHeader()->permalink;
-            }
-            else
-            {
-                return Path::createSlug($this->getHeader()->title);
-            }
-        }
-        else
-        {
-            //return preg_replace(
-                //'@' . Config::getInstance()->getDir()->src . '@',
-                //Config::getInstance()->getDir()->dest,
-                //$this->obj_path->getPathName()
-            //);
-            return preg_replace(
-                '@' . Config::getInstance()->getDir()->src . '@',
-                '',
-                $this->obj_path->getPathName()
-            );
-        }
+        return Path::url($this);
     }
+
 
     public function getSrcPath()
     {
         return $this->obj_path->getPathName();
     }
+
     public function getObjPath()
     {
         return $this->obj_path;
-    }
-
-    public function getDestPath()
-    {
-        $str_prov = $this->getUrl();
-
-        if($this->isPost())
-        {
-            return $str_prov . 'index.html';
-        }
-        else if($this->isPage())
-        {
-            if(preg_match('@/$@', $str_prov))
-            {
-                return $str_prov . 'index.html';
-            }
-            else
-            {
-                return $str_prov;
-            }
-        }
-        else
-        {
-            return $str_prov;
-        }
     }
 }
