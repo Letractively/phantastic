@@ -29,6 +29,20 @@ namespace Malenki\Phantastic;
  */
 class Path
 {
+    /**
+     * Retourne le séparateur de répertoire en fonction du système.
+     *
+     * Sur Microsoft Windows, retourne '\', sur UNIX retourne '/'. 
+     * 
+     * @static
+     * @access public
+     * @return string
+     */
+    public static function getDirectorySeparator()
+    {
+        return DIRECTORY_SEPARATOR;
+    }
+
     public static function getSrcPost()
     {
         return sprintf(
@@ -60,14 +74,16 @@ class Path
 
         // Remove diacritics
         $arr_prov = array(
-            "é" => "e", "è" => "e", "ê" => "e", "ë" => "e", "ę" => "e", "ẽ" => "e", 'ě' => 'e', 
-            "á" => "a", "à" => "a", "â" => "a", "ä" => "a", "ą" => "a", "ã" => "a", "å" => "a", 'ǎ' => 'a', 'ã' => 'a',
-            "ó" => "o", "ò" => "o", "ô" => "o", "ö" => "o", "õ" => "o", 'ǒ' => 'o', 'ø' => 'o', 'õ' => 'o',
-            "í" => "i", "ì" => "i", "î" => "i", "ï" => "i", "ĩ" => "i", 'ǐ' => 'i',
-            "ú" => "u", "ù" => "u", "û" => "u", "ü" => "u", "ũ" => "u", "ů" => "u", 'ǔ' => 'u',
-            "ý" => "y", "ỳ" => "y", "ŷ" => "y", "ÿ" => "y", "ỹ" => "y",
-            "ç" => "c", "ñ" => "n", 'ł' => 'l', 'ð' => 'dh', 'þ' => 'th',
-            "œ" => "oe", "æ" => "ae", "ß" => "ss", 'ŀl' => 'll',
+            "é" => "e", "è" => "e", "ê" => "e", "ë" => "e", "ę" => "e", "ẽ" => 
+            "e", 'ě' => 'e', "á" => "a", "à" => "a", "â" => "a", "ä" => "a", 
+            "ą" => "a", "ã" => "a", "å" => "a", 'ǎ' => 'a', 'ã' => 'a', "ó" => 
+            "o", "ò" => "o", "ô" => "o", "ö" => "o", "õ" => "o", 'ǒ' => 'o', 
+            'ø' => 'o', 'õ' => 'o', "í" => "i", "ì" => "i", "î" => "i", "ï" => 
+            "i", "ĩ" => "i", 'ǐ' => 'i', "ú" => "u", "ù" => "u", "û" => "u", 
+            "ü" => "u", "ũ" => "u", "ů" => "u", 'ǔ' => 'u', "ý" => "y", "ỳ" => 
+            "y", "ŷ" => "y", "ÿ" => "y", "ỹ" => "y", "ç" => "c", "ñ" => "n", 
+            'ł' => 'l', 'ð' => 'dh', 'þ' => 'th', "œ" => "oe", "æ" => "ae", "ß" 
+            => "ss", 'ŀl' => 'll',
                  
         );
        
@@ -76,11 +92,76 @@ class Path
             $str = preg_replace(sprintf('/%s/', $k), $v, $str);
         }
 
-        // Remove spaces and other stuffs
         $str = preg_replace('/[^a-z]+/', '-', trim($str));
         $str = trim($str, '-');
 
         return $str;	
+    }
+
+
+    //TODO: todo :)
+    public static function url($obj)
+    {
+        return null;
+    }
+
+    public static function build($obj)
+    {
+        //TODO à améliorer, ce n’est qu’un premier jet…
+        $str_out = '';
+
+        if($obj instanceof Tag)
+        {
+            $str_out = self::getDest() . $obj->getSlug() . '/index.html';
+
+        }
+        elseif($obj instanceof File)
+        {
+            $str_slug = '';
+
+            if($obj->isPost())
+            {
+                $str_out = sprintf(File::PERMALINK_POST, Path::findCategoryFor($obj)->getSlug(), $obj->getTitleSlug()) . 'index.html';
+            }
+            else if($obj->isPage())
+            {
+                if(isset($obj->getHeader()->permalink))
+                {
+                    $str_slug = $obj->getHeader()->permalink;
+                }
+                else
+                {
+                    $str_slug = Path::createSlug($obj->getHeader()->title);
+                }
+                
+                if(preg_match('@/$@', $str_slug))
+                {
+                    $str_out = $str_slug . 'index.html';
+                }
+                else
+                {
+                    $str_out = $str_slug;
+                }
+            }
+            else
+            {
+                $str_out = preg_replace(
+                    '@' . self::getSrc() . '@',
+                    '',
+                    $obj->getSrcPath()
+                );
+            }
+
+            $str_out = self::getDest() . $str_out;
+            
+        }
+
+        if(!file_exists(dirname($str_out)))
+        {
+            mkdir(dirname($str_out), 0755, true);
+        }
+
+        return $str_out;
     }
 
 

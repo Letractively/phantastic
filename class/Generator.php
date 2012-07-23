@@ -30,13 +30,11 @@ class Generator
 {
     protected $arr_file = array();
     protected $str_src = array();
-    protected $str_dest = array();
     protected $str_tag_cloud = null;
 
     public function __construct()
     {
         $this->str_src = Config::getInstance()->getDir()->src;
-        $this->str_dest = Config::getInstance()->getDir()->dest;
         Tag::setBasePath(Config::PATH_TAGS); //TODO: ne doit pas être en dur!!!
     }
 
@@ -107,11 +105,13 @@ class Generator
 
         foreach($this->arr_file as $f)
         {
-            $str_dest = $this->str_dest . $f->getDestPath();
+            /*
+            $str_dest = Path::getDest() . $f->getDestPath();
 
             if(!file_exists(dirname($str_dest))){
                 mkdir(dirname($str_dest), 0755, true);
             }
+             */
 
             if(!$f->isFile())
             {
@@ -122,20 +122,21 @@ class Generator
                 $t->assign('site_name', Config::getInstance()->getName());
                 $t->assign('site_base', Config::getInstance()->getBase());
                 $t->assign('site_meta', Config::getInstance()->getMeta());
-                file_put_contents($str_dest, $t->render());
+                //file_put_contents($str_dest, $t->render());
+                file_put_contents(Path::build($f), $t->render());
             }
             else
             {
-                copy($f->getSrcPath(), $str_dest);
+                //copy($f->getSrcPath(), $str_dest);
+                copy($f->getSrcPath(), Path::build($f));
             }
         }
     }
 
     public function renderTagPages()
     {
-        foreach(Tag::getCloud() as $slug => $tag)
+        foreach(Tag::getCloud() as $tag)
         {
-
             $t = new Template('tag-page');
             $t->setTitle($tag->getName());
             $arrProv = array();
@@ -151,14 +152,8 @@ class Generator
             $t->assign('site_base', Config::getInstance()->getBase());
             $t->assign('site_meta', Config::getInstance()->getMeta());
             
-            
-            $str_dest = $this->str_dest . $slug . '/index.html';
+            file_put_contents(Path::build($tag), $t->render());
 
-            if(!file_exists(dirname($str_dest))){
-                mkdir(dirname($str_dest), 0755, true);
-            }
-
-            file_put_contents($str_dest, $t->render());
         }
     }
 
