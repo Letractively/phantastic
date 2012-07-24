@@ -102,6 +102,30 @@ class Path
     //TODO: todo :)
     public static function url($obj)
     {
+        if($obj instanceof Tag)
+        {
+            //Prendre ce qui est défini dans le fichier de configuration
+            //Par exemple /tags/:title/
+        }
+        elseif($obj instanceof File)
+        {
+            if($obj->isPost())
+            {
+                //Prendre ce qui est défini dans le fichier de configuration 
+                //SAUF si une directive « permalink » existe dans l’en-tête 
+                //YAML du fichier
+                //Par exemple /:year/:month/:day/:title.html
+            }
+            else if($obj->isPage())
+            {
+                //Prendre la directive « permalink » définie dans l’en-tête YAML
+                //Par exemple /a-propos/
+            }
+            else
+            {
+                //Prendre le chemin tel que défini dans la source.
+            }
+        }
         return null;
     }
 
