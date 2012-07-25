@@ -20,7 +20,7 @@
 
 include('lib/phpmarkdown/markdown.php');
 
-//TODO: Créer une classe s’occupant des URL
+include_once('class/Permalink.php');
 include_once('class/Path.php');
 include_once('class/Parser.php');
 include_once('class/Config.php');
