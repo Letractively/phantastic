@@ -38,7 +38,7 @@ var searchData=
   ['gettemplate',['getTemplate',['../classMalenki_1_1Phantastic_1_1Path.html#a5e044419cfa31814e77c0cb1a479bdbb',1,'Malenki::Phantastic::Path']]],
   ['gettimezone',['getTimezone',['../classMalenki_1_1Phantastic_1_1Config.html#a75685c746b729603cb6768d951f9ad1d',1,'Malenki::Phantastic::Config']]],
   ['gettitleslug',['getTitleSlug',['../classMalenki_1_1Phantastic_1_1File.html#a6b5b7c29aa7f555daea95ac7f2b74dc2',1,'Malenki::Phantastic::File']]],
-  ['geturl',['getUrl',['../classMalenki_1_1Phantastic_1_1File.html#ae3ed3172a16a29ea2960d41fc72864fc',1,'Malenki::Phantastic::File']]],
+  ['geturl',['getUrl',['../classMalenki_1_1Phantastic_1_1File.html#ae3ed3172a16a29ea2960d41fc72864fc',1,'Malenki\Phantastic\File\getUrl()'],['../classMalenki_1_1Phantastic_1_1Permalink.html#a5c0fe5f7c318ee67537685daa3bf3df3',1,'Malenki\Phantastic\Permalink\getUrl()']]],
   ['geturltag',['getUrlTag',['../classMalenki_1_1Phantastic_1_1Config.html#a18cadb666b7fae9da1cbde8742f76ddb',1,'Malenki::Phantastic::Config']]],
   ['getusage',['getUsage',['../classMalenki_1_1Opt_1_1Options.html#a01a064815f929ab9cad5815bb6cb25d0',1,'Malenki::Opt::Options']]],
   ['getvalue',['getValue',['../classMalenki_1_1Opt_1_1Arg.html#ae04d362fb460bda141aaff95da959f6f',1,'Malenki::Opt::Arg']]]

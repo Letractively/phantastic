@@ -47,6 +47,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Page&#160;principale</span></a></li>
+      <li><a href="pages.html"><span>Pages&#160;associées</span></a></li>
       <li><a href="namespaces.html"><span>Espaces&#160;de&#160;nommage</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li>
@@ -143,6 +144,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
 , <a class="el" href="classMalenki_1_1Phantastic_1_1History.html#aca95eba657e8b16af14cdf9367670062">Malenki\Phantastic\History</a>
 , <a class="el" href="classMalenki_1_1Phantastic_1_1Tag.html#a040a16c2724b543bd96d8f4d0d46515c">Malenki\Phantastic\Tag</a>
 </li>
+<li>$arr_keys_values
+: <a class="el" href="classMalenki_1_1Phantastic_1_1Permalink.html#a9d8b14d06f205e3f6c536783bc81e1e1">Malenki\Phantastic\Permalink</a>
+</li>
 <li>$arr_name
 : <a class="el" href="classMalenki_1_1Phantastic_1_1Category.html#acc7f459bbee04030946eed4af6361ba0">Malenki\Phantastic\Category</a>
 </li>
@@ -152,11 +156,17 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
 <li>$arr_parsed
 : <a class="el" href="classMalenki_1_1Opt_1_1Options.html#a57600ab5579b0cd54865d2ebc3611e44">Malenki\Opt\Options</a>
 </li>
+<li>$arr_placeholders
+: <a class="el" href="classMalenki_1_1Phantastic_1_1Permalink.html#ac1385b3889d6a4d230c6dad74cabca4b">Malenki\Phantastic\Permalink</a>
+</li>
 <li>$arr_prohibited
 : <a class="el" href="classMalenki_1_1Opt_1_1Options.html#a13879f5449b948481a33b2a850619814">Malenki\Opt\Options</a>
 </li>
 <li>$id
 : <a class="el" href="classMalenki_1_1Phantastic_1_1File.html#a5fbc95856ae40bbf94cbcc1e3e30dda3">Malenki\Phantastic\File</a>
+</li>
+<li>$int_count
+: <a class="el" href="classMalenki_1_1Phantastic_1_1Permalink.html#af12722db9ea5b5ea128b83c11df12cde">Malenki\Phantastic\Permalink</a>
 </li>
 <li>$int_max_count
 : <a class="el" href="classMalenki_1_1Phantastic_1_1Tag.html#a54069840971ba200fd00249374ab56de">Malenki\Phantastic\Tag</a>
@@ -196,8 +206,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
 : <a class="el" href="classMalenki_1_1Phantastic_1_1Tag.html#a9dcaf299763ebddc5d19196bc5918607">Malenki\Phantastic\Tag</a>
 </li>
 <li>$str_content
-: <a class="el" href="classMalenki_1_1Phantastic_1_1Parser.html#a525f3fe776aa0f4c7bf861c729576cca">Malenki\Phantastic\Parser</a>
-, <a class="el" href="classMalenki_1_1Phantastic_1_1File.html#a2e607501cb97d69b9f468e84418dc66e">Malenki\Phantastic\File</a>
+: <a class="el" href="classMalenki_1_1Phantastic_1_1File.html#a2e607501cb97d69b9f468e84418dc66e">Malenki\Phantastic\File</a>
+, <a class="el" href="classMalenki_1_1Phantastic_1_1Parser.html#a525f3fe776aa0f4c7bf861c729576cca">Malenki\Phantastic\Parser</a>
 </li>
 <li>$str_date
 : <a class="el" href="classMalenki_1_1Phantastic_1_1History.html#aeaa9a7e3217d79716e6d370e4b716dcb">Malenki\Phantastic\History</a>
@@ -206,8 +216,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
 : <a class="el" href="classMalenki_1_1Opt_1_1Options.html#a6656dbc9fae880f7f5e3afa2c08ae8b1">Malenki\Opt\Options</a>
 </li>
 <li>$str_help
-: <a class="el" href="classMalenki_1_1Opt_1_1Options.html#a7c6df155e4b1458813c67879544862b1">Malenki\Opt\Options</a>
-, <a class="el" href="classMalenki_1_1Opt_1_1Arg.html#a7492765129d155994b7b584633ea82ab">Malenki\Opt\Arg</a>
+: <a class="el" href="classMalenki_1_1Opt_1_1Arg.html#a7492765129d155994b7b584633ea82ab">Malenki\Opt\Arg</a>
+, <a class="el" href="classMalenki_1_1Opt_1_1Options.html#a7c6df155e4b1458813c67879544862b1">Malenki\Opt\Options</a>
 </li>
 <li>$str_long
 : <a class="el" href="classMalenki_1_1Opt_1_1Arg.html#acf3bcb352d919798d382050ae5ef3523">Malenki\Opt\Arg</a>
@@ -216,9 +226,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
 : <a class="el" href="classMalenki_1_1Phantastic_1_1Config.html#aba63d79f7f0c6ac1bfea9a31a62b17e7">Malenki\Phantastic\Config</a>
 </li>
 <li>$str_name
-: <a class="el" href="classMalenki_1_1Opt_1_1Arg.html#a5cc181280dd5e73e6bfd274800165929">Malenki\Opt\Arg</a>
-, <a class="el" href="classMalenki_1_1Phantastic_1_1Tag.html#a18ac122861e8d5fb189dde595acf2507">Malenki\Phantastic\Tag</a>
+: <a class="el" href="classMalenki_1_1Phantastic_1_1Tag.html#a18ac122861e8d5fb189dde595acf2507">Malenki\Phantastic\Tag</a>
+, <a class="el" href="classMalenki_1_1Opt_1_1Arg.html#a5cc181280dd5e73e6bfd274800165929">Malenki\Opt\Arg</a>
 , <a class="el" href="classMalenki_1_1Phantastic_1_1Config.html#a41e53776e4e7c34b9a494a5bcaacbfc0">Malenki\Phantastic\Config</a>
+</li>
+<li>$str_permalink
+: <a class="el" href="classMalenki_1_1Phantastic_1_1Permalink.html#a33fad7cfc1afd0b592f1ae164e080e5c">Malenki\Phantastic\Permalink</a>
 </li>
 <li>$str_server
 : <a class="el" href="classMalenki_1_1Phantastic_1_1Config.html#a225de50eb688644c165fcc0d3172731f">Malenki\Phantastic\Config</a>
@@ -246,7 +259,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
 : <a class="el" href="classMalenki_1_1Phantastic_1_1Template.html#a042b4523e10a3bc3e1e726da6bb81273">Malenki\Phantastic\Template</a>
 </li>
 <li>$str_url
-: <a class="el" href="classMalenki_1_1Phantastic_1_1File.html#a802be875209636cc6dc23bb24c0d6878">Malenki\Phantastic\File</a>
+: <a class="el" href="classMalenki_1_1Phantastic_1_1Permalink.html#abedfaab8fa89e0b8b713cb28a7407d9f">Malenki\Phantastic\Permalink</a>
+, <a class="el" href="classMalenki_1_1Phantastic_1_1File.html#a802be875209636cc6dc23bb24c0d6878">Malenki\Phantastic\File</a>
 </li>
 <li>$str_url_tag
 : <a class="el" href="classMalenki_1_1Phantastic_1_1Config.html#a9ac9e1047aaa12a4d1f51601e8370569">Malenki\Phantastic\Config</a>
@@ -340,7 +354,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
 
 
 <hr class="footer"/><address class="footer"><small>
-Généré le Mardi Juillet 24 2012 01:37:46 pour Phantastic par &#160;<a href="http://www.doxygen.org/index.html">
+Généré le Vendredi Juillet 27 2012 00:51:37 pour Phantastic par &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>

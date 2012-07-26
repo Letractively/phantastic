@@ -1,6 +1,7 @@
 var searchData=
 [
   ['isfile',['isFile',['../classMalenki_1_1Phantastic_1_1File.html#a781499b4edaef6db778429e179954a60',1,'Malenki::Phantastic::File']]],
+  ['isok',['isOk',['../classMalenki_1_1Phantastic_1_1Permalink.html#a20d03766f223acadf3867473f4380e3d',1,'Malenki::Phantastic::Permalink']]],
   ['isoptionalvalue',['isOptionalValue',['../classMalenki_1_1Opt_1_1Arg.html#a854d0d328a87f641805c6f1ea9e333d9',1,'Malenki::Opt::Arg']]],
   ['ispage',['isPage',['../classMalenki_1_1Phantastic_1_1File.html#ac3658ae644ee9a3628a18fdec161be70',1,'Malenki::Phantastic::File']]],
   ['ispost',['isPost',['../classMalenki_1_1Phantastic_1_1File.html#a81647bc2222d3d6d247fb27ff71692f6',1,'Malenki::Phantastic::File']]],
