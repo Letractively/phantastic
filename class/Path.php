@@ -67,6 +67,46 @@ class Path
         return Config::getInstance()->getDir()->template;
     }
 
+    /**
+     * Crée des morceaux d’URL avec uniquement des caractères ASCII et des 
+     * tirets d’hyphénation.
+     *
+     * Cette méthode statique prend en argument une chaîne de caractères 
+     * qu’elle traite de manière à en convertir les caractères portant des 
+     * diacritiques ou des caractères composés en caractères équivalents ASCII 
+     * minuscules.
+     *
+     * Ainsi, par exemple, la chaîne suivante : « BŒUF » donnera « boeuf » et 
+     * celle-ci : « théâtre » donnera « theatre ».
+     *
+     * Ensuite, tout ce qui n’est pas un caractère alphanumérique ASCII et tout 
+     * ce qui n’est pas un tiret est éliminé, les tirets prennent la place de 
+     * caractères spéciaux, comme les espaces, les ponctuations… Et les 
+     * doublons tirets sont enlevés pour n’en laisser qu’un. La chaîne obtenue 
+     * ne doit ni commencer, ni finir par un tiret.
+     *
+     * Ainsi, la phrase « Mais ?! Où est donc Ornicar ? » donnera 
+     * « mais-ou-est-donc-ornicar ».
+     *
+     * Pour le moment, les langues d’Europe Occidentales sont supportées, mais 
+     * bientôt quelques langues non basées sur un alphabet latin seront 
+     * supportées. Ainsi le grec et le russe feront leur apparition avec un 
+     * système de translitération. Soyez donc patient ;)
+     * 
+     * @param string $str 
+     * @static
+     * @access public
+     * @return string
+     * @todo Supporter d’autres langues à alphabet latin dérivé comme le Turc, 
+     * des langues d’Europe de l’Est, le Serbo-Croate, le Polonais, le Roumain, 
+     * etc.
+     * @todo Supporter l’esperanto, en utilisant la notation « x ».
+     * @todo Faire un premier support des langues n’utilisant pas un alphabet 
+     * latin. S’occuper alors en priorité du grec, du russe, du bulgare, de 
+     * l’ukrainien.
+     * @todo En priorité basse, voir pour le Coréen (langue à syllabe), voir 
+     * s’il est possible d’obtenir un truc sympa sans trop faire compliqué.
+     */
     public static function createSlug($str)
     {
         // to lower case
@@ -99,7 +139,23 @@ class Path
     }
 
 
-    //TODO: todo :)
+    /**
+     * Construit l’URL de l’objet fourni. 
+     * 
+     * - Pour Tag, prend en référence le permalink défini dans la configuration
+     * - Pour Page, soit la configuration globale est prise en compte, soit le 
+     * permalink de l’en-tête YAML du fichier est pris en compte. Quoi qu’il en 
+     * soit, c’est toujours le permalink de l’en-tête YAML qui prime sur la 
+     * configuration globale.
+     * - Pour les autres, leur URL est « calqué » sur leur chemin d’origine.
+     *
+     * @param mixed $obj 
+     * @static
+     * @access public
+     * @return string
+     *
+     * @todo À coder dès que possible.
+     */
     public static function url($obj)
     {
         if($obj instanceof Tag)
@@ -129,6 +185,22 @@ class Path
         return null;
     }
 
+    /**
+     * Crée un chemin selon le type d’objet passé en argument. 
+     * 
+     * Selon que le type d’objet est un Tag, un File de type Post, un File de 
+     * type Page ou un File de type autre, cette méthode crée le chemin, tant 
+     * au niveau de la chaîne de caractères, qu’au niveau du système de fichier 
+     * en créant le ou les dossiers nécessaires.
+     *
+     * @param mixed $obj un Objet Tag ou File 
+     * @static
+     * @access public
+     * @return string
+     *
+     * @todo Il faut réécrire cette méthode suite aux évolutions récentes. 
+     * Peut-être que les objets de type Category pourront être utilisé.
+     */
     public static function build($obj)
     {
         //TODO à améliorer, ce n’est qu’un premier jet…

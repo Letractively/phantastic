@@ -47,6 +47,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Recherche');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Page&#160;principale</span></a></li>
+      <li><a href="pages.html"><span>Pages&#160;associées</span></a></li>
       <li><a href="namespaces.html"><span>Espaces&#160;de&#160;nommage</span></a></li>
       <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li>
@@ -115,8 +116,11 @@ Fonctions membres publiques statiques</h2></td></tr>
 <tr class="memitem:a25f0cd258fda8dc438db59fc1f9ab36d"><td class="memItemLeft" align="right" valign="top">static&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMalenki_1_1Phantastic_1_1Path.html#a25f0cd258fda8dc438db59fc1f9ab36d">getDest</a> ()</td></tr>
 <tr class="memitem:a5e044419cfa31814e77c0cb1a479bdbb"><td class="memItemLeft" align="right" valign="top">static&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMalenki_1_1Phantastic_1_1Path.html#a5e044419cfa31814e77c0cb1a479bdbb">getTemplate</a> ()</td></tr>
 <tr class="memitem:ac72ba51993e040d7703ebe7d7e09183d"><td class="memItemLeft" align="right" valign="top">static&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMalenki_1_1Phantastic_1_1Path.html#ac72ba51993e040d7703ebe7d7e09183d">createSlug</a> ($str)</td></tr>
+<tr class="memdesc:ac72ba51993e040d7703ebe7d7e09183d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Crée des morceaux d’URL avec uniquement des caractères ASCII et des tirets d’hyphénation.  <a href="#ac72ba51993e040d7703ebe7d7e09183d"></a><br/></td></tr>
 <tr class="memitem:a39845c03de5bc1d99f07ccade5602e06"><td class="memItemLeft" align="right" valign="top">static&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMalenki_1_1Phantastic_1_1Path.html#a39845c03de5bc1d99f07ccade5602e06">url</a> ($obj)</td></tr>
+<tr class="memdesc:a39845c03de5bc1d99f07ccade5602e06"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construit l’URL de l’objet fourni.  <a href="#a39845c03de5bc1d99f07ccade5602e06"></a><br/></td></tr>
 <tr class="memitem:a33b0b24bff0e6e31f9b3ee582816b48a"><td class="memItemLeft" align="right" valign="top">static&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMalenki_1_1Phantastic_1_1Path.html#a33b0b24bff0e6e31f9b3ee582816b48a">build</a> ($obj)</td></tr>
+<tr class="memdesc:a33b0b24bff0e6e31f9b3ee582816b48a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Crée un chemin selon le type d’objet passé en argument.  <a href="#a33b0b24bff0e6e31f9b3ee582816b48a"></a><br/></td></tr>
 <tr class="memitem:af5a0f8d5f6900d209fa6a7e507502bf4"><td class="memItemLeft" align="right" valign="top">static&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMalenki_1_1Phantastic_1_1Path.html#af5a0f8d5f6900d209fa6a7e507502bf4">findCategoryFor</a> (<a class="el" href="classMalenki_1_1Phantastic_1_1File.html">File</a> $file)</td></tr>
 </table>
 <hr/><h2>Documentation des fonctions membres</h2>
@@ -135,6 +139,17 @@ Fonctions membres publiques statiques</h2></td></tr>
 </div>
 <div class="memdoc">
 
+<p>Crée un chemin selon le type d’objet passé en argument. </p>
+<p>Selon que le type d’objet est un <a class="el" href="classMalenki_1_1Phantastic_1_1Tag.html">Tag</a>, un <a class="el" href="classMalenki_1_1Phantastic_1_1File.html">File</a> de type Post, un <a class="el" href="classMalenki_1_1Phantastic_1_1File.html">File</a> de type Page ou un <a class="el" href="classMalenki_1_1Phantastic_1_1File.html">File</a> de type autre, cette méthode crée le chemin, tant au niveau de la chaîne de caractères, qu’au niveau du système de fichier en créant le ou les dossiers nécessaires.</p>
+<dl class="params"><dt><b>Paramètres:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramtype">mixed</td><td class="paramname">$obj</td><td>un Objet <a class="el" href="classMalenki_1_1Phantastic_1_1Tag.html">Tag</a> ou <a class="el" href="classMalenki_1_1Phantastic_1_1File.html">File</a>   public </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Renvoie:</dt><dd>string</dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000003">A faire:</a></b></dt><dd>Il faut réécrire cette méthode suite aux évolutions récentes. Peut-être que les objets de type <a class="el" href="classMalenki_1_1Phantastic_1_1Category.html">Category</a> pourront être utilisé. </dd></dl>
+
 </div>
 </div>
 <a class="anchor" id="ac72ba51993e040d7703ebe7d7e09183d"></a>
@@ -151,6 +166,25 @@ Fonctions membres publiques statiques</h2></td></tr>
       </table>
 </div>
 <div class="memdoc">
+
+<p>Crée des morceaux d’URL avec uniquement des caractères ASCII et des tirets d’hyphénation. </p>
+<p>Cette méthode statique prend en argument une chaîne de caractères qu’elle traite de manière à en convertir les caractères portant des diacritiques ou des caractères composés en caractères équivalents ASCII minuscules.</p>
+<p>Ainsi, par exemple, la chaîne suivante : « BŒUF » donnera « boeuf » et celle-ci : « théâtre » donnera « theatre ».</p>
+<p>Ensuite, tout ce qui n’est pas un caractère alphanumérique ASCII et tout ce qui n’est pas un tiret est éliminé, les tirets prennent la place de caractères spéciaux, comme les espaces, les ponctuations… Et les doublons tirets sont enlevés pour n’en laisser qu’un. La chaîne obtenue ne doit ni commencer, ni finir par un tiret.</p>
+<p>Ainsi, la phrase « Mais ?! Où est donc Ornicar ? » donnera « mais-ou-est-donc-ornicar ».</p>
+<p>Pour le moment, les langues d’Europe Occidentales sont supportées, mais bientôt quelques langues non basées sur un alphabet latin seront supportées. Ainsi le grec et le russe feront leur apparition avec un système de translitération. Soyez donc patient ;)</p>
+<dl class="params"><dt><b>Paramètres:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramtype">string</td><td class="paramname">$str</td><td>public </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Renvoie:</dt><dd>string </dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000001">A faire:</a></b></dt><dd><p class="startdd">Supporter d’autres langues à alphabet latin dérivé comme le Turc, des langues d’Europe de l’Est, le Serbo-Croate, le Polonais, le Roumain, etc. </p>
+<p>Supporter l’esperanto, en utilisant la notation « x ». </p>
+<p>Faire un premier support des langues n’utilisant pas un alphabet latin. S’occuper alors en priorité du grec, du russe, du bulgare, de l’ukrainien. </p>
+<p class="enddd">En priorité basse, voir pour le Coréen (langue à syllabe), voir s’il est possible d’obtenir un truc sympa sans trop faire compliqué. </p>
+</dd></dl>
 
 </div>
 </div>
@@ -271,6 +305,21 @@ Fonctions membres publiques statiques</h2></td></tr>
 </div>
 <div class="memdoc">
 
+<p>Construit l’URL de l’objet fourni. </p>
+<ul>
+<li>Pour <a class="el" href="classMalenki_1_1Phantastic_1_1Tag.html">Tag</a>, prend en référence le permalink défini dans la configuration</li>
+<li>Pour Page, soit la configuration globale est prise en compte, soit le permalink de l’en-tête YAML du fichier est pris en compte. Quoi qu’il en soit, c’est toujours le permalink de l’en-tête YAML qui prime sur la configuration globale.</li>
+<li>Pour les autres, leur URL est « calqué » sur leur chemin d’origine.</li>
+</ul>
+<dl class="params"><dt><b>Paramètres:</b></dt><dd>
+  <table class="params">
+    <tr><td class="paramtype">mixed</td><td class="paramname">$obj</td><td>public </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Renvoie:</dt><dd>string</dd></dl>
+<dl class="todo"><dt><b><a class="el" href="todo.html#_todo000002">A faire:</a></b></dt><dd>À coder dès que possible. </dd></dl>
+
 </div>
 </div>
 <hr/>La documentation de cette classe a été générée à partir du fichier suivant :<ul>
@@ -280,7 +329,7 @@ Fonctions membres publiques statiques</h2></td></tr>
 
 
 <hr class="footer"/><address class="footer"><small>
-Généré le Mardi Juillet 24 2012 01:37:46 pour Phantastic par &#160;<a href="http://www.doxygen.org/index.html">
+Généré le Vendredi Juillet 27 2012 00:51:37 pour Phantastic par &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.0
 </small></address>
