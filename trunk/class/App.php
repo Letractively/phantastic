@@ -21,8 +21,24 @@ namespace Malenki\Phantastic;
 use Malenki\Opt\Options as Options;
 use Malenki\Opt\Arg as Arg;
 
+
+/**
+ * Le moteur de l’application.
+ *
+ * Mise en place des paramètre, détection des options choisies par 
+ * l’utilisateur, et lancement du processus. 
+ * 
+ * @copyright 2012 Michel Petit
+ * @author Michel Petit <petit.michel@gmail.com> 
+ */
 class App
 {
+    /**
+     * Mise en place des options et de leur message d’aide. 
+     * 
+     * @access public
+     * @return void
+     */
     public function setOpt()
     {
 
@@ -84,6 +100,13 @@ class App
         Options::getInstance()->setVersion('Affiche la version de Phantastic.');
     }
 
+    /**
+     * Récupère les options passées au programme et met en place la 
+     * configuration. 
+     * 
+     * @access public
+     * @return void
+     */
     public function getOpt()
     {
         // OK, on interpète ce qu’on a en ligne de commande et on détermine quoi faire…
@@ -134,6 +157,12 @@ class App
 
 
 
+    /**
+     * Lance le générateur, le serveur… Bref, le cœur du programme ! 
+     * 
+     * @access public
+     * @return void
+     */
     public function run()
     {
         date_default_timezone_set(Config::getInstance()->getTimezone());

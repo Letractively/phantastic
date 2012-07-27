@@ -19,6 +19,18 @@
 
 namespace Malenki\Phantastic;
 
+/**
+ * Prend en charge les catégories.
+ *
+ * Les catégories sont supportées par un double fonctionnement :
+ * - La structure des dossiers organisant les Posts donne les URL des catégories
+ * - Le fichier de configuration comporte les traductions éventuelles.
+ *
+ * Avec cette classe, on a la liste des Posts pour chaque nœud.
+ * 
+ * @copyright 2012 Michel Petit
+ * @author Michel Petit <petit.michel@gmail.com> 
+ */
 class Category
 {
     protected static $arr_hier = array();
@@ -62,6 +74,14 @@ class Category
 
     }
 
+    /**
+     * Retourne les catégories, ou une d’entre elles si un argument est passé. 
+     * 
+     * @param string $key 
+     * @static
+     * @access public
+     * @return mixed Soit un array soit un objet Category
+     */
     public static function getHier($key = null)
     {
         if(is_null($key))
@@ -83,6 +103,15 @@ class Category
     }
 
 
+    /**
+     * Ajoute la catégorie instanciée à la liste des autres catégories.
+     *
+     * Cette méthode stocke l’instanciation courante dans une liste statique de 
+     * la classe Category. 
+     * 
+     * @access public
+     * @return void
+     */
     public function addToHier()
     {
         if(!isset(self::$arr_hier[$this->getSlug()]))
@@ -94,6 +123,13 @@ class Category
 
 
 
+    /**
+     * Ajoute l’ID d’un Post à la liste de l’objet Category. 
+     * 
+     * @param integer $int_id 
+     * @access public
+     * @return void
+     */
     public function addId($int_id)
     {
         if($int_id > 0)
@@ -104,6 +140,8 @@ class Category
 
 
     /**
+     * Donne le nombre d’ID Post stockés pour l’objet Category.
+     *
      * @return integer
      */
     public function getCount()
@@ -112,6 +150,8 @@ class Category
     }
 
     /**
+     * Retourne le nom de la catégorie.
+     *
      * @return string
      */
     public function getName()
@@ -119,13 +159,22 @@ class Category
         return $this->arr_name[count($this->arr_name) - 1];
     }
 
+    /**
+     * Retourne l’arborescence de la catégorie actuelle. 
+     * 
+     * Donne un tableau retournant l’arborescence de la catégorie, avec en 
+     * premier les parents et à la fin les enfants.
+     *
+     * @access public
+     * @return array
+     */
     public function getNode()
     {
         return $this->arr_node;
     }
 
     /**
-     * ID des fichiers
+     * ID des fichiers Post de cette catégorie.
      * 
      * @access public
      * @return array
