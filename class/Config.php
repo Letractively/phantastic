@@ -22,6 +22,16 @@ namespace Malenki\Phantastic;
 use Malenki\Phantastic\Parser as Parser;
 use DateTimeZone;
 
+/**
+ * La configuration du programme.
+ *
+ * Créée par les options en ligne de commande ou par un fichier de 
+ * configuration YAML, cette classe permet aussi l’utilisation de nombreux 
+ * paramètres avec des valeurs par défaut.
+ * 
+ * @copyright 2012 Michel Petit
+ * @author Michel Petit <petit.michel@gmail.com> 
+ */
 class Config
 {
     //TODO: Déplacer ça dans la classe Path
