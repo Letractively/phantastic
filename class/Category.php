@@ -213,4 +213,13 @@ class Category
         return $this->str_slug;
     }
 
+    public function getRootParent()
+    {
+        return new self($this->arr_node[0]);
+    }
+
+    public function getUrl($full = false)
+    {
+        return Permalink::cleanUrl($this->getSlug());
+    }
 }
