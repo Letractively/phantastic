@@ -80,7 +80,7 @@ class Category
      * @param string $key 
      * @static
      * @access public
-     * @return mixed Soit un array soit un objet Category
+     * @return mixed Soit un array soit un objet Category soit null
      */
     public static function getHier($key = null)
     {
@@ -90,12 +90,25 @@ class Category
         }
         else
         {
-            return self::$arr_hier[$key];
+            if(isset(self::$arr_hier[$key]))
+            {
+                return self::$arr_hier[$key];
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 
     public static function set($str_path)
     {
+        // Si un chemin de catégorie existe, créer et ajouter cette catégorie.
+        if($str_path. Path::getDirectorySeparator() == Path::getSrcPost())
+        {
+            $str_path = Path::getDirectorySeparator();
+        }
+
         $cat = new self($str_path);
         $cat->addToHier();
 

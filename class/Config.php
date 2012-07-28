@@ -34,12 +34,6 @@ use DateTimeZone;
  */
 class Config
 {
-    //TODO: Déplacer ça dans la classe Path
-    const PATH_SRC = 'src/';
-    const PATH_DEST = 'out/';
-    const PATH_POST = 'post/';
-    const PATH_TEMPLATE = 'template/';
-    const PATH_TAGS = 'tags/';
 
     protected static $mixed_yaml = null;
 
@@ -51,13 +45,15 @@ class Config
     
     protected $str_timezone = 'UTC';
     
-    protected $str_server = 'localhost:8080';
+    protected $str_server = Server::HOST;
 
     protected $arr_categories = null;
     
-    protected $str_base = '/';
+    protected $str_base = null;
     
-    protected $str_url_tag = 'tags/%s/';
+    protected $str_permalink_tag = null;
+
+    protected $str_permalink_post = null;
     
     protected $obj_dir = null;
 
@@ -104,11 +100,15 @@ class Config
     private function __construct()
     {
         $this->obj_dir = (object) array(
-            'template' => self::PATH_TEMPLATE,
-            'post' => self::PATH_POST,
-            'src'  => self::PATH_SRC,
-            'dest' => self::PATH_DEST
+            'template' => Path::TEMPLATE,
+            'post'     => Path::POST,
+            'src'      => Path::SRC,
+            'dest'     => Path::DEST
         );
+
+        $this->str_base = Permalink::BASE;
+        $this->str_permalink_tag = Permalink::TAG;
+        $this->str_permalink_post = Permalink::POST;
 
         if(!is_null(self::$mixed_yaml))
         {
@@ -118,6 +118,8 @@ class Config
             if(isset(self::$mixed_yaml->timezone))
                 $this->setTimezone(self::$mixed_yaml->timezone);
 
+            // si server actif, désactive l’URL de base pour avoir une 
+            // navigation fonctionnnelle
             if(isset(self::$mixed_yaml->server))
             {
                 $this->setServer(self::$mixed_yaml->server);
@@ -127,8 +129,11 @@ class Config
 
             $this->setCategories(self::$mixed_yaml->categories);
 
-            if(isset(self::$mixed_yaml->url['tag']))
-                $this->setUrlTag(self::$mixed_yaml->url['tag']);
+            if(isset(self::$mixed_yaml->permalink['tag']))
+                $this->setPermalinkTag(self::$mixed_yaml->permalink['tag']);
+            
+            if(isset(self::$mixed_yaml->permalink['post']))
+                $this->setPermalinkPost(self::$mixed_yaml->permalink['post']);
 
             $this->setPostDir(self::$mixed_yaml->dir['post']);
             $this->setSrcDir(self::$mixed_yaml->dir['src']);
@@ -217,18 +222,15 @@ class Config
         }
     }
 
-    public function setUrlTag($str)
+    public function setPermalinkTag($str)
     {
-        if(self::basicCheck($str))
-        {
-            $this->str_url_tag = $str;
-        }
-        else
-        {
-            throw new Exception('Custom tag URL must ending with a slash.');
-        }
+        $this->str_permalink_tag = $str;
     }
 
+    public function setPermalinkPost($str)
+    {
+        $this->str_permalink_post = $str;
+    }
 
     public function setPostDir($str)
     {
@@ -308,11 +310,17 @@ class Config
         return $this->str_base;
     }
 
-    public function getUrlTag()
+    public function getPermalinkTag()
     {
-        return $this->str_url_tag;
+        return $this->str_permalink_tag;
+    }
+    
+    public function getPermalinkPost()
+    {
+        return $this->str_permalink_post;
     }
 
+    //TODO: Créer des raccourcis du genre getDirPost()
     public function getDir()
     {
         return $this->obj_dir;

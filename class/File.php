@@ -23,9 +23,6 @@ use Malenki\Phantastic\Parser as Parser;
 
 class File
 {
-    const PERMALINK_POST = '%s/%s/'; //TODO: à dégager de là
-    const PERMALINK_TAG = 'tags/%s/'; //TODO: à dégager de là
-
     protected static $last_id = 0;
     protected $id = null;
     protected $obj_path = null;
@@ -82,7 +79,7 @@ class File
     {
         return $this->hasHeader() && preg_match(
             '@'. Config::getInstance()->getDir()->src . Config::getInstance()->getDir()->post . '@',
-            $this->obj_path->getPath()
+            $this->obj_path->getPath() . Path::getDirectorySeparator()
         );
     }
 
@@ -94,8 +91,6 @@ class File
     /**
      * Détermine si le fichier est un fichier à interpréter ou non.
      *
-     * Détermine si le fichier est un post ou une page. 
-     * 
      * @access public
      * @return boolean
      */
@@ -106,15 +101,84 @@ class File
 
     public function getTitleSlug()
     {
-        return Path::createSlug($this->getHeader()->title);
+        return Permalink::createSlug($this->getHeader()->title);
     }
 
-    //TODO: Sera opérationnel en même temps que Path::url
-    public function getUrl()
+
+
+    public function getUrl($full = false)
     {
-        return Path::url($this);
+        if($this->isPost())
+        {
+            //Prendre ce qui est défini dans le fichier de configuration 
+            //SAUF si une directive « permalink » existe dans l’en-tête 
+            //YAML du fichier
+            if(isset($this->getHeader()->permalink))
+            {
+                $str_permalink = $this->getHeader()->permalink;
+            }
+            else
+            {
+                $str_permalink = Config::getInstance()->getPermalinkPost();
+            }
+        }
+        else if($this->isPage())
+        {
+            //Prendre la directive « permalink » définie dans l’en-tête YAML
+            //Par exemple /a-propos/
+            $str_permalink = $this->getHeader()->permalink;
+        }
+        else
+        {
+            //Prendre le chemin tel que défini dans la source.
+            $str_permalink = preg_replace(
+                '@' . Path::getSrc() . '@',
+                '',
+                $this->getSrcPath()
+            );
+
+            return Permalink::cleanUrl($str_permalink);
+        }
+
+        $url = new Permalink($str_permalink);
+        $url->setTitle($this->getTitleSlug());
+        $url->setYear($this->getYear());
+        $url->setMonth($this->getMonth());
+        $url->setDay($this->getDay());
+
+        // Les catégories n’existent que pour les Posts
+        if($this->isPost())
+        {
+            $cat = Path::findCategoryFor($this);
+            $url->setCategories($cat);
+        }
+
+
+
+        if($url->isOk())
+        {
+            return $url->getUrl($full);
+        }
+        else
+        {
+            throw new \Exception('Issue occured while building URL!');
+        }
     }
 
+    public function getYear()
+    {
+        return(date('Y', $this->obj_path->getMTime()));
+    }
+
+    public function getMonth()
+    {
+        return(date('m', $this->obj_path->getMTime()));
+    }
+
+    public function getDay()
+    {
+        return(date('d', $this->obj_path->getMTime()));
+    }
 
     public function getSrcPath()
     {

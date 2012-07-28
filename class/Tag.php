@@ -22,8 +22,6 @@ namespace Malenki\Phantastic;
 /**
  * Tag 
  * 
- * @package 
- * @version $id$
  * @copyright 2012 Michel Petit
  * @author Michel Petit <petit.michel@gmail.com> 
  */
@@ -32,8 +30,6 @@ class Tag
     protected static $arr_cloud = array();
     protected static $int_min_count = 0;
     protected static $int_max_count = 0;
-    protected static $str_base_path = null;
-
     protected $str_name;
     protected $str_slug = null;
     protected $str_style = null;
@@ -43,11 +39,6 @@ class Tag
     {
         $this->str_name = $str_name;
 
-    }
-
-    public static function setBasePath($str)
-    {
-        self::$str_base_path = $str;
     }
 
     public static function getCloud()
@@ -155,12 +146,27 @@ class Tag
     {
         if(is_null($this->str_slug))
         {
-            $this->str_slug = self::$str_base_path . Path::createSlug($this->str_name);
+            $this->str_slug = Permalink::createSlug($this->str_name);
         }
 
         return $this->str_slug;
     }
 
+
+    public function getUrl($full = false)
+    {
+        $url = new Permalink(Config::getInstance()->getPermalinkTag());
+        $url->setTitle($this->getSlug());
+
+        if($url->isOk())
+        {
+            return $url->getUrl($full);
+        }
+        else
+        {
+            throw new \Exception('Issue occured while building tag’s URL!');
+        }
+    }
 
 
     /**
