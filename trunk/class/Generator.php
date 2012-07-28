@@ -31,6 +31,7 @@ class Generator
     protected $arr_file = array();
     protected $str_src = array();
     protected $str_tag_cloud = null;
+    protected $str_cat_list = null;
 
     public function __construct()
     {
@@ -99,18 +100,30 @@ class Generator
         return $this->str_tag_cloud;
     }
 
+    public function renderCatList()
+    {
+        if(is_null($this->str_cat_list))
+        {
+            $t = new Template('categories');
+            $t->assign('categories', Category::getHier());
+            $this->str_cat_list = $t->render();
+        }
+
+        return $this->str_cat_list;
+    }
 
     public function render()
     {
-
         foreach($this->arr_file as $f)
         {
             if(!$f->isFile())
             {
+                //TODO: C’est probablement ici que je devrai m’occuper des next/prev…
                 $t = new Template($f->getHeader()->layout);
                 $t->setTitle($f->getHeader()->title);
                 $t->setContent($f->getContent());
                 $t->assign('tag_cloud', $this->renderTagCloud());
+                $t->assign('cat_list', $this->renderCatList());
                 $t->assign('site_name', Config::getInstance()->getName());
                 $t->assign('site_base', Config::getInstance()->getBase());
                 $t->assign('site_meta', Config::getInstance()->getMeta());
@@ -138,6 +151,7 @@ class Generator
 
             $t->assign('posts', $arrProv);
             $t->assign('tag_cloud', $this->renderTagCloud());
+            $t->assign('cat_list', $this->renderCatList());
             $t->assign('site_name', Config::getInstance()->getName());
             $t->assign('site_base', Config::getInstance()->getBase());
             $t->assign('site_meta', Config::getInstance()->getMeta());
