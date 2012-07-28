@@ -6,8 +6,9 @@ server: True|False|127.0.0.1:8080
 categories:
     one-cat-dir: Name of this category
     another-cat-dir: Name for this other one
-url:
-    tag: 'tags/%s/'
+permalink:
+    tag: '/tags/:title/'
+    post: '/:categories/:year/:month/:day/:title.html'
 dir:
     template: 'template/'
     post: 'post/'

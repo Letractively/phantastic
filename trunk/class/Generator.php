@@ -35,7 +35,6 @@ class Generator
     public function __construct()
     {
         $this->str_src = Config::getInstance()->getDir()->src;
-        Tag::setBasePath(Config::PATH_TAGS); //TODO: ne doit pas être en dur!!!
     }
 
 
@@ -72,10 +71,11 @@ class Generator
                         }
                     }
                    
-                    Category::set($file->getPath())->addId($f->getId());
+
 
                     if($f->isPost())
                     {
+                        Category::set($file->getPath())->addId($f->getId());
                         History::set(date('Y-m-d H:i:s', $file->getMTime()))->addId($f->getId());
                     }
                     
@@ -105,14 +105,6 @@ class Generator
 
         foreach($this->arr_file as $f)
         {
-            /*
-            $str_dest = Path::getDest() . $f->getDestPath();
-
-            if(!file_exists(dirname($str_dest))){
-                mkdir(dirname($str_dest), 0755, true);
-            }
-             */
-
             if(!$f->isFile())
             {
                 $t = new Template($f->getHeader()->layout);
@@ -122,12 +114,10 @@ class Generator
                 $t->assign('site_name', Config::getInstance()->getName());
                 $t->assign('site_base', Config::getInstance()->getBase());
                 $t->assign('site_meta', Config::getInstance()->getMeta());
-                //file_put_contents($str_dest, $t->render());
                 file_put_contents(Path::build($f), $t->render());
             }
             else
             {
-                //copy($f->getSrcPath(), $str_dest);
                 copy($f->getSrcPath(), Path::build($f));
             }
         }
@@ -153,7 +143,6 @@ class Generator
             $t->assign('site_meta', Config::getInstance()->getMeta());
             
             file_put_contents(Path::build($tag), $t->render());
-
         }
     }
 

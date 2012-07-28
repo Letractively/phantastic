@@ -26,9 +26,37 @@ namespace Malenki\Phantastic;
  * @package Pahntastic
  * @copyright 2012 Michel Petit
  * @author Michel Petit <petit.michel@gmail.com> 
+ * @todo Il faudra prévoir un moyen pour manipuler les chemins sous windows…
  */
 class Path
 {
+    const SRC = 'src/';
+    const DEST = 'out/';
+    const POST = 'post/';
+    const TEMPLATE = 'template/';
+    const TAGS = 'tags/';
+
+
+    public static function cleanPath($str_path)
+    {
+        return preg_replace(
+            sprintf('@%s+@', self::getDirectorySeparator()),
+            self::getDirectorySeparator(),
+            $str_path
+        );
+    }
+
+
+    public static function createIndex($str_path)
+    {
+        if(!preg_match(sprintf('@%s[a-z\.]+$@', self::getDirectorySeparator()), $str_path))
+        {
+            $str_path = $str_path . self::getDirectorySeparator() . 'index.html';
+        }
+
+        return self::cleanPath($str_path);
+    }
+
     /**
      * Retourne le séparateur de répertoire en fonction du système.
      *
@@ -67,77 +95,6 @@ class Path
         return Config::getInstance()->getDir()->template;
     }
 
-    /**
-     * Crée des morceaux d’URL avec uniquement des caractères ASCII et des 
-     * tirets d’hyphénation.
-     *
-     * Cette méthode statique prend en argument une chaîne de caractères 
-     * qu’elle traite de manière à en convertir les caractères portant des 
-     * diacritiques ou des caractères composés en caractères équivalents ASCII 
-     * minuscules.
-     *
-     * Ainsi, par exemple, la chaîne suivante : « BŒUF » donnera « boeuf » et 
-     * celle-ci : « théâtre » donnera « theatre ».
-     *
-     * Ensuite, tout ce qui n’est pas un caractère alphanumérique ASCII et tout 
-     * ce qui n’est pas un tiret est éliminé, les tirets prennent la place de 
-     * caractères spéciaux, comme les espaces, les ponctuations… Et les 
-     * doublons tirets sont enlevés pour n’en laisser qu’un. La chaîne obtenue 
-     * ne doit ni commencer, ni finir par un tiret.
-     *
-     * Ainsi, la phrase « Mais ?! Où est donc Ornicar ? » donnera 
-     * « mais-ou-est-donc-ornicar ».
-     *
-     * Pour le moment, les langues d’Europe Occidentales sont supportées, mais 
-     * bientôt quelques langues non basées sur un alphabet latin seront 
-     * supportées. Ainsi le grec et le russe feront leur apparition avec un 
-     * système de translitération. Soyez donc patient ;)
-     * 
-     * @param string $str 
-     * @static
-     * @access public
-     * @return string
-     * @todo Supporter d’autres langues à alphabet latin dérivé comme le Turc, 
-     * des langues d’Europe de l’Est, le Serbo-Croate, le Polonais, le Roumain, 
-     * etc.
-     * @todo Supporter l’esperanto, en utilisant la notation « x ».
-     * @todo Faire un premier support des langues n’utilisant pas un alphabet 
-     * latin. S’occuper alors en priorité du grec, du russe, du bulgare, de 
-     * l’ukrainien.
-     * @todo En priorité basse, voir pour le Coréen (langue à syllabe), voir 
-     * s’il est possible d’obtenir un truc sympa sans trop faire compliqué.
-     */
-    public static function createSlug($str)
-    {
-        // to lower case
-        $str = mb_strtolower($str, 'UTF-8');
-
-        // Remove diacritics
-        $arr_prov = array(
-            "é" => "e", "è" => "e", "ê" => "e", "ë" => "e", "ę" => "e", "ẽ" => 
-            "e", 'ě' => 'e', "á" => "a", "à" => "a", "â" => "a", "ä" => "a", 
-            "ą" => "a", "ã" => "a", "å" => "a", 'ǎ' => 'a', 'ã' => 'a', "ó" => 
-            "o", "ò" => "o", "ô" => "o", "ö" => "o", "õ" => "o", 'ǒ' => 'o', 
-            'ø' => 'o', 'õ' => 'o', "í" => "i", "ì" => "i", "î" => "i", "ï" => 
-            "i", "ĩ" => "i", 'ǐ' => 'i', "ú" => "u", "ù" => "u", "û" => "u", 
-            "ü" => "u", "ũ" => "u", "ů" => "u", 'ǔ' => 'u', "ý" => "y", "ỳ" => 
-            "y", "ŷ" => "y", "ÿ" => "y", "ỹ" => "y", "ç" => "c", "ñ" => "n", 
-            'ł' => 'l', 'ð' => 'dh', 'þ' => 'th', "œ" => "oe", "æ" => "ae", "ß" 
-            => "ss", 'ŀl' => 'll',
-                 
-        );
-       
-        foreach($arr_prov as $k => $v)
-        {
-            $str = preg_replace(sprintf('/%s/', $k), $v, $str);
-        }
-
-        $str = preg_replace('/[^a-z]+/', '-', trim($str));
-        $str = trim($str, '-');
-
-        return $str;	
-    }
-
 
     /**
      * Construit l’URL de l’objet fourni. 
@@ -156,6 +113,7 @@ class Path
      *
      * @todo À coder dès que possible.
      */
+    /*
     public static function url($obj)
     {
         if($obj instanceof Tag)
@@ -184,6 +142,7 @@ class Path
         }
         return null;
     }
+     */
 
     /**
      * Crée un chemin selon le type d’objet passé en argument. 
@@ -198,58 +157,23 @@ class Path
      * @access public
      * @return string
      *
-     * @todo Il faut réécrire cette méthode suite aux évolutions récentes. 
-     * Peut-être que les objets de type Category pourront être utilisé.
+     * @todo Peut-être que les objets de type Category pourront être utilisé.
      */
     public static function build($obj)
     {
-        //TODO à améliorer, ce n’est qu’un premier jet…
-        $str_out = '';
+        $str_out = self::cleanPath(self::getDest() . $obj->getUrl());
 
         if($obj instanceof Tag)
         {
-            $str_out = self::getDest() . $obj->getSlug() . '/index.html';
+            $str_out = self::createIndex($str_out);
 
         }
         elseif($obj instanceof File)
         {
-            $str_slug = '';
-
-            if($obj->isPost())
+            if(!$obj->isFile())
             {
-                $str_out = sprintf(File::PERMALINK_POST, Path::findCategoryFor($obj)->getSlug(), $obj->getTitleSlug()) . 'index.html';
+                $str_out = self::createIndex($str_out);
             }
-            else if($obj->isPage())
-            {
-                if(isset($obj->getHeader()->permalink))
-                {
-                    $str_slug = $obj->getHeader()->permalink;
-                }
-                else
-                {
-                    $str_slug = Path::createSlug($obj->getHeader()->title);
-                }
-                
-                if(preg_match('@/$@', $str_slug))
-                {
-                    $str_out = $str_slug . 'index.html';
-                }
-                else
-                {
-                    $str_out = $str_slug;
-                }
-            }
-            else
-            {
-                $str_out = preg_replace(
-                    '@' . self::getSrc() . '@',
-                    '',
-                    $obj->getSrcPath()
-                );
-            }
-
-            $str_out = self::getDest() . $str_out;
-            
         }
 
         if(!file_exists(dirname($str_out)))
@@ -263,7 +187,14 @@ class Path
 
     public static function findCategoryFor(File $file)
     {
-        $key = preg_replace('@'.Path::getSrcPost().'@', '',$file->getObjPath()->getPath());
+        if($file->getObjPath()->getPath(). Path::getDirectorySeparator() == Path::getSrcPost())
+        {
+            $key = Path::getDirectorySeparator();
+        }
+        else
+        {
+            $key = preg_replace('@'.Path::getSrcPost().'@', '',$file->getObjPath()->getPath());
+        }
         return Category::getHier($key);
     }
 

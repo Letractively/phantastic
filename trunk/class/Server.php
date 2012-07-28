@@ -21,8 +21,11 @@ namespace Malenki\Phantastic;
 
 class Server
 {
+    const HOST = 'localhost:8080';
     const EXEC_PHP = 'php -S %s -t %s';
     const EXEC_PYTHON = 'cd %s && python -m SimpleHTTPServer %s; cd -';
+
+    protected $str_host = null;
 
     public static function hasInternalServer()
     {
