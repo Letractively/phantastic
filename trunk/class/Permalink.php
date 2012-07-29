@@ -19,6 +19,24 @@
 
 namespace Malenki\Phantastic;
 
+/**
+ * Permet de construire des URL à partir d’un motif et de clés/valeurs fournies.
+ *
+ * À différents niveaux, il est possible de spécifier des « permalinks » pour 
+ * les Posts, les Pages… Ces « permalinks » peuvent être définis dans l’en-tête 
+ * YAML ou le fichier de configuration.
+ *
+ * Un permalink est un motif de l’URL à obtenir. Les parties à remplacer par 
+ * des valeurs commencent par un deux point et sont composées de caractères 
+ * alphabétiques minuscules.
+ *
+ * Ces mots clés sont les suivants : `:categories`, `:year`, `:month, `:day`
+ * et `:title`.
+ * 
+ * @package Phantastic 
+ * @copyright 2012 Michel Petit
+ * @author Michel Petit <petit.michel@gmail.com> 
+ */
 class Permalink
 {
     const BASE  = '/';
@@ -61,6 +79,14 @@ class Permalink
         return in_array($str, self::$arr_placeholders);
     }
 
+    /**
+     * Enlève les slashes surnumérairse résultant parfois de la construction de l’URL. 
+     * 
+     * @param string $url 
+     * @static
+     * @access public
+     * @return string
+     */
     public static function cleanUrl($url)
     {
         $url = '/' . $url;
@@ -207,7 +233,7 @@ class Permalink
     }
 
 
-    //TODO: Voir comment faire ça…
+    //TODO: Voir comment faire ça… Et si je le fais d’ailleurs…
     public function setDate()
     {
     }
@@ -264,6 +290,12 @@ class Permalink
 
 
 
+    /**
+     * Retourne l’URL construite. 
+     * 
+     * @access public
+     * @return string
+     */
     public function __toString()
     {
         return $this->getUrl();

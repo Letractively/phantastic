@@ -130,7 +130,7 @@ class Category
 
 
     /**
-     * getTree 
+     * Construit et retourne l’arbre hiérarchique des catégories. 
      * 
      * @static
      * @access public
@@ -153,7 +153,7 @@ class Category
     }
 
     /**
-     * getFileIdsAtLevel 
+     * Pour un niveau demandé, retourne les IDs de fichiers correspondants.
      * 
      * @param integer $int_level 
      * @static
