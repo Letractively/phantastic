@@ -102,7 +102,7 @@ class Generator
     {
         if(is_null($this->str_tag_cloud))
         {
-            $t = new Template('tags');
+            $t = new Template(Template::TAGS);
             $t->assign('tags', Tag::getCloud());
             $this->str_tag_cloud = $t->render();
         }
@@ -114,7 +114,7 @@ class Generator
     {
         if(is_null($this->str_cat_list))
         {
-            $t = new Template('categories');
+            $t = new Template(Template::CATEGORIES);
             $t->assign('categories', Category::getHier());
             $this->str_cat_list = $t->render();
         }
@@ -155,7 +155,7 @@ class Generator
     {
         foreach(Tag::getCloud() as $tag)
         {
-            $t = new Template('tag-page');
+            $t = new Template(Template::TAG_PAGE);
             $t->assign('title', $tag->getName());
             $arrProv = array();
 
@@ -177,7 +177,12 @@ class Generator
 
     public function renderCategoryPages()
     {
-        //TODO: Code this part!!!
-        //var_dump(Category::getHier());
+        foreach(Category::getHier() as $str_slug => $obj_cat)
+        {
+            if($str_slug != '/') // cas particulier des articles sans catégorie
+            {
+                //var_dump(Path::build($obj_cat));
+            }
+        }
     }
 }
