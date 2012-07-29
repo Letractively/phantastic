@@ -29,11 +29,6 @@ class Template
         $this->str_tmpl = $tmpl;
     }
 
-    public function setTitle($str)
-    {
-        $this->assign('title', $str);
-    }
-
     public function setContent($str)
     {
         $this->assign('content', $str);
