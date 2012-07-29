@@ -42,7 +42,6 @@ class Category
 
     public function __construct($str_path)
     {
-
         $str_root = sprintf(
             '%s%s',
             Config::getInstance()->getDir()->src,
@@ -54,6 +53,12 @@ class Category
             '/',
             preg_replace("@^$str_root@", '', $str_path)
         );
+
+        // cas où le post n’a pas de catégorie
+        if(isset($this->arr_node[0]) && $this->arr_node[0] == '')
+        {
+            $this->arr_node = array();
+        }
 
         if(count($this->arr_node))
         {
@@ -100,6 +105,93 @@ class Category
             }
         }
     }
+    
+    protected static function getTreeRecursive(Category $obj_cat, $arr_tree)
+    {
+        $arr_path = $obj_cat->getNode();
+
+        $arr_original =& $arr_tree;
+
+        foreach ($arr_path as $str_node)
+        {
+            if (!array_key_exists($str_node, $arr_tree))
+            {
+                $arr_tree[$str_node] = array();
+            }
+
+            if ($str_node)
+            {
+                $arr_tree =& $arr_tree[$str_node];
+            }
+        }
+
+        return $arr_original;
+    }
+
+
+    /**
+     * getTree 
+     * 
+     * @static
+     * @access public
+     * @return array
+     */
+    public static function getTree()
+    {
+        $arr_tree = array();
+
+        foreach(self::$arr_hier as $obj_cat)
+        {
+            $arr_prov = $obj_cat->getNode();
+
+            if(count($arr_prov) == 0) continue;
+
+            $arr_tree = self::getTreeRecursive($obj_cat, $arr_tree);
+        }
+
+        return $arr_tree;
+    }
+
+    /**
+     * getFileIdsAtLevel 
+     * 
+     * @param integer $int_level 
+     * @static
+     * @access public
+     * @return  array
+     */
+    public static function getFileIdsAtLevel($int_level = null)
+    {
+        $arr_tree_id = array();
+
+        foreach(self::$arr_hier as $obj_cat)
+        {
+            $arr_prov = $obj_cat->getNode();
+
+            if(count($arr_prov) == 0) continue;
+
+            // On stocke par niveau
+            $int_rank = count($arr_prov) - 1;
+
+            if(is_integer($int_level) && $int_level < count($arr_prov))
+            {
+                $int_rank = $int_level;
+            }
+
+            $key = implode('/', array_slice($arr_prov, 0, $int_rank + 1));
+
+            if(!isset($arr_tree_id[$key]))
+            {
+                $arr_tree_id[$key] = $obj_cat->getFileIds();
+            }
+            else
+            {
+                $arr_tree_id[$key] = array_merge($arr_tree_id[$key], $obj_cat->getFileIds());
+            }
+        }
+
+        return $arr_tree_id;
+    }
 
     public static function set($str_path)
     {
@@ -127,6 +219,10 @@ class Category
      */
     public function addToHier()
     {
+
+        //var_dump($this->getNode());
+        //var_dump($this->getSlug());
+
         if(!isset(self::$arr_hier[$this->getSlug()]))
         {
             self::$arr_hier[$this->getSlug()] = $this;
@@ -207,7 +303,14 @@ class Category
     {
         if(is_null($this->str_slug))
         {
-            $this->str_slug = implode('/', $this->arr_node);
+            if(count($this->arr_node))
+            {
+                $this->str_slug = implode('/', $this->arr_node);
+            }
+            else
+            {
+                $this->str_slug = '/';
+            }
         }
 
         return $this->str_slug;
@@ -215,7 +318,14 @@ class Category
 
     public function getRootParent()
     {
-        return new self($this->arr_node[0]);
+        if(isset($this->arr_node[0]))
+        {
+            return new self($this->arr_node[0]);
+        }
+        else
+        {
+            return $this;
+        }
     }
 
     public function getUrl($full = false)

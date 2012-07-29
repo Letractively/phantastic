@@ -21,6 +21,14 @@ namespace Malenki\Phantastic;
 
 class Template 
 {
+    const TAG_PAGE = 'tag-page';
+    const TAG_INDEX = 'tag-index';
+
+    const CATEGORY_PAGE = 'category-page';
+    
+    const TAGS = 'tags';
+    const CATEGORIES = 'categories';
+
     protected $arr_data = array();
     protected $str_tmpl = null;
 

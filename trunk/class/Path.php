@@ -175,6 +175,19 @@ class Path
                 $str_out = self::createIndex($str_out);
             }
         }
+        elseif($obj instanceof Category)
+        {
+            // La catégorie elle-même, création de son chemin pour l’index
+            $str_out = self::createIndex($str_out);
+
+            // maintenant, occupons-nous des catégories parentes
+            // TODO: à faire à part si on souhaite garder cette logique de fonctionnement
+            $arr_prov = array_slice($obj->getNode(), 0, count($obj->getNode()) -1);
+            
+            foreach($arr_prov as $str_node)
+            {
+            }
+        }
 
         if(!file_exists(dirname($str_out)))
         {
