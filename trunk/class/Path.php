@@ -23,7 +23,6 @@ namespace Malenki\Phantastic;
 /**
  * Classe relative à la création d’URL ou de chemin dans un FS. 
  * 
- * @package Phantastic
  * @copyright 2012 Michel Petit
  * @author Michel Petit <petit.michel@gmail.com> 
  * @todo Il faudra prévoir un moyen pour manipuler les chemins sous windows…

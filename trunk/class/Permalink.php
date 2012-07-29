@@ -33,7 +33,6 @@ namespace Malenki\Phantastic;
  * Ces mots clés sont les suivants : `:categories`, `:year`, `:month, `:day`
  * et `:title`.
  * 
- * @package Phantastic 
  * @copyright 2012 Michel Petit
  * @author Michel Petit <petit.michel@gmail.com> 
  */

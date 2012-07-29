@@ -22,7 +22,6 @@ namespace Malenki\Opt;
 /**
  * Arg 
  * 
- * @package phantastic 
  * @author Michel Petit <petit.michel@gmail.com> 
  */
 class Arg 

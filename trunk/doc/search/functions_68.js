@@ -7,5 +7,6 @@ var searchData=
   ['hasinternalserver',['hasInternalServer',['../classMalenki_1_1Phantastic_1_1Server.html#a26708abd08b88e1c323205a66fa36f79',1,'Malenki::Phantastic::Server']]],
   ['haslong',['hasLong',['../classMalenki_1_1Opt_1_1Arg.html#acbb064349432d8087231a0d524bda2f3',1,'Malenki::Opt::Arg']]],
   ['haspeclparser',['hasPeclParser',['../classMalenki_1_1Phantastic_1_1Parser.html#aacf4e5d04afc9335cfab9b0af9357b5f',1,'Malenki::Phantastic::Parser']]],
+  ['haspython',['hasPython',['../classMalenki_1_1Phantastic_1_1Server.html#af8fda5ba87511a3b53d51899a3eed9ee',1,'Malenki::Phantastic::Server']]],
   ['hasshort',['hasShort',['../classMalenki_1_1Opt_1_1Arg.html#ab943e8962e5606fcd57afa0fdda06c81',1,'Malenki::Opt::Arg']]]
 ];
