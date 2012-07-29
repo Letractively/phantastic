@@ -23,20 +23,28 @@ namespace Malenki\Phantastic;
 /**
  * Classe relative à la création d’URL ou de chemin dans un FS. 
  * 
- * @package Pahntastic
+ * @package Phantastic
  * @copyright 2012 Michel Petit
  * @author Michel Petit <petit.michel@gmail.com> 
  * @todo Il faudra prévoir un moyen pour manipuler les chemins sous windows…
  */
 class Path
 {
-    const SRC = 'src/';
-    const DEST = 'out/';
-    const POST = 'post/';
-    const TEMPLATE = 'template/';
-    const TAGS = 'tags/';
+    const SRC = 'src/'; // chemin par défaut des sources du site
+    const DEST = 'out/'; // chemin par défaut des fichiers générés 
+    const POST = 'post/'; // chemin relatif à SRC pour les Posts
+    const TEMPLATE = 'template/'; // chemin par défaut pour les templates
+    const TAGS = 'tags/'; // chemin de destination par défaut des tags
 
 
+    /**
+     * Débarasse le chemin des séparateurs de répertoire doublons. 
+     * 
+     * @param string $str_path 
+     * @static
+     * @access public
+     * @return string
+     */
     public static function cleanPath($str_path)
     {
         return preg_replace(
@@ -47,6 +55,18 @@ class Path
     }
 
 
+    /**
+     * Ajoute un « index.html » si le chemin se termine par un simple dossier.
+     * 
+     * Si le chemin se termine déjà par un fichier, retourne juste le chemin sans changement. 
+     * Cette méthode est utile dans le cas des chemins des Posts ou des Pages, 
+     * quand l’URL voulu n’a pas d’estension.
+     *
+     * @param string $str_path 
+     * @static
+     * @access public
+     * @return string
+     */
     public static function createIndex($str_path)
     {
         if(!preg_match(sprintf('@%s[a-z\.]+$@', self::getDirectorySeparator()), $str_path))
@@ -71,8 +91,16 @@ class Path
         return DIRECTORY_SEPARATOR;
     }
 
+    /**
+     * Retourne le chemin menant à la source des Posts.
+     * 
+     * @static
+     * @access public
+     * @return string
+     */
     public static function getSrcPost()
     {
+        //TODO: sera à revoir
         return sprintf(
             '%s%s',
             Config::getInstance()->getDir()->src,
@@ -80,69 +108,43 @@ class Path
         );
     }
 
+    /**
+     * Obtient le chemin des sources. 
+     * 
+     * @static
+     * @access public
+     * @return string
+     */
     public static function getSrc()
     {
         return Config::getInstance()->getDir()->src;
     }
     
+    /**
+     * Obtient le chemin du répertoire de génération du site. 
+     * 
+     * @static
+     * @access public
+     * @return string
+     */
     public static function getDest()
     {
         return Config::getInstance()->getDir()->dest;
     }
     
+    /**
+     * Obtient le chemin stockant les templates. 
+     * 
+     * @static
+     * @access public
+     * @return string
+     */
     public static function getTemplate()
     {
         return Config::getInstance()->getDir()->template;
     }
 
 
-    /**
-     * Construit l’URL de l’objet fourni. 
-     * 
-     * - Pour Tag, prend en référence le permalink défini dans la configuration
-     * - Pour Page, soit la configuration globale est prise en compte, soit le 
-     * permalink de l’en-tête YAML du fichier est pris en compte. Quoi qu’il en 
-     * soit, c’est toujours le permalink de l’en-tête YAML qui prime sur la 
-     * configuration globale.
-     * - Pour les autres, leur URL est « calqué » sur leur chemin d’origine.
-     *
-     * @param mixed $obj 
-     * @static
-     * @access public
-     * @return string
-     *
-     * @todo À coder dès que possible.
-     */
-    /*
-    public static function url($obj)
-    {
-        if($obj instanceof Tag)
-        {
-            //Prendre ce qui est défini dans le fichier de configuration
-            //Par exemple /tags/:title/
-        }
-        elseif($obj instanceof File)
-        {
-            if($obj->isPost())
-            {
-                //Prendre ce qui est défini dans le fichier de configuration 
-                //SAUF si une directive « permalink » existe dans l’en-tête 
-                //YAML du fichier
-                //Par exemple /:year/:month/:day/:title.html
-            }
-            else if($obj->isPage())
-            {
-                //Prendre la directive « permalink » définie dans l’en-tête YAML
-                //Par exemple /a-propos/
-            }
-            else
-            {
-                //Prendre le chemin tel que défini dans la source.
-            }
-        }
-        return null;
-    }
-     */
 
     /**
      * Crée un chemin selon le type d’objet passé en argument. 
@@ -198,6 +200,14 @@ class Path
     }
 
 
+    /**
+     * Retourne l’objet Category pour l’objet File donné. 
+     * 
+     * @param File $file 
+     * @static
+     * @access public
+     * @return Category
+     */
     public static function findCategoryFor(File $file)
     {
         if($file->getObjPath()->getPath(). Path::getDirectorySeparator() == Path::getSrcPost())

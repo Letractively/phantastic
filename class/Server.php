@@ -19,6 +19,27 @@
 
 namespace Malenki\Phantastic;
 
+/**
+ * Lance un serveur web basique pour tester le site généré.
+ *
+ * À partir de PHP 5.4, il est possible de lancer un petit serveur dans un
+ * répertoire donné. Cette fonctionnalité est exploitée par Phantastic afin 
+ * d’avoir cette facilité de développement, qui évite par exemple d’écrire un 
+ * virtual host pour Apache, d’arrêter le server, le relancer, etc.
+ *
+ * S’il n’y a pas PHP 5.4 mais une version inférieure, alors la présence de 
+ * Python est testée afin d’utiliser le module `SimpleHTTPServer` de Python 
+ * pour avoir la fonctionnalité équivalente. Si Python n’est pas présent, alors 
+ * aucun serveur n’est lancé.
+ *
+ * Par ailleurs, si l’utilisation du serveur est demandée, l’option spécifiant
+ * la base de l’URL (hostname) est écrasée pour permettre la navigation sur le
+ * site.
+ * 
+ * @package Phantastic
+ * @copyright 2012 Michel Petit 
+ * @author Michel Petit <petit.michel@gmail.com> 
+ */
 class Server
 {
     const HOST = 'localhost:8080';

@@ -20,8 +20,10 @@
 namespace Malenki\Phantastic;
 
 /**
- * Tag 
+ * Supporte à la fois un Tag en tant que tel et un Tag Cloud pour l’ensemble du 
+ * site. 
  * 
+ * @package Phantastic
  * @copyright 2012 Michel Petit
  * @author Michel Petit <petit.michel@gmail.com> 
  */
