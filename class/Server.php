@@ -36,7 +36,6 @@ namespace Malenki\Phantastic;
  * la base de l’URL (hostname) est écrasée pour permettre la navigation sur le
  * site.
  * 
- * @package Phantastic
  * @copyright 2012 Michel Petit 
  * @author Michel Petit <petit.michel@gmail.com> 
  */

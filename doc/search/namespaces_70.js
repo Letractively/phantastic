@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['pahntastic',['Pahntastic',['../namespacePahntastic.html',1,'']]],
-  ['phantastic',['phantastic',['../namespacephantastic.html',1,'']]]
+  ['phantastic',['Phantastic',['../namespacePhantastic.html',1,'']]]
 ];
