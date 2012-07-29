@@ -130,7 +130,12 @@ class Generator
             {
                 //TODO: C’est probablement ici que je devrai m’occuper des next/prev…
                 $t = new Template($f->getHeader()->layout);
-                $t->setTitle($f->getHeader()->title);
+                
+                foreach($f->getHeader() as $k => $v)
+                {
+                    $t->assign($k, $v);
+                }
+
                 $t->setContent($f->getContent());
                 $t->assign('tag_cloud', $this->renderTagCloud());
                 $t->assign('cat_list', $this->renderCatList());
@@ -151,7 +156,7 @@ class Generator
         foreach(Tag::getCloud() as $tag)
         {
             $t = new Template('tag-page');
-            $t->setTitle($tag->getName());
+            $t->assign('title', $tag->getName());
             $arrProv = array();
 
             foreach($tag->getFileIds() as $id)
