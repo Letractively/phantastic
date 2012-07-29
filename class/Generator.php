@@ -64,6 +64,16 @@ class Generator
                 $f = new File($file);
                 if($f->isPost() || $f->isPage())
                 {
+                    //Avant tout, tester si ça doit être publié ou pas…
+                    if(isset($f->getHeader()->published))
+                    {
+                        if(!$f->getHeader()->published)
+                        {
+                            continue;
+                        }
+                    }
+                   
+                   
                     if(isset($f->getHeader()->tags))
                     {
                         foreach($f->getHeader()->tags as $tag)
@@ -71,7 +81,7 @@ class Generator
                             Tag::set($tag)->addId($f->getId());
                         }
                     }
-                   
+                    
 
 
                     if($f->isPost())
