@@ -179,14 +179,27 @@ class App
 
         //debug, test…
         //var_dump(History::getLast());
-
+        //var_dump(Category::getTree(0));
 
 
         if(Config::getInstance()->getServer())
         {
-            $s = new Server();
-            $s->setHost(Config::getInstance()->getServer());
-            $s->run();
+            if(Server::canRun())
+            {
+                printf("Serveur de test lancé à l’adresse http://%s. Pour quitter, pressez « Contrôle-C »\n", Config::getInstance()->getServer());
+                $s = new Server();
+                $s->setHost(Config::getInstance()->getServer());
+                $s->run();
+            }
+            else
+            {
+                //TODO: Utiliser la futur classe de Log pour ce message
+                printf("Impossible de lancer un serveur sur cette 
+                    configuration. Mettez à jour PHP ou installez Python. 
+                    Sinon désactivez l’option de lancement d’un serveur dans 
+                    l’appel à Phantastic ou dans votre fichier de 
+                    configuration\n");
+            }
         }
     }
 }

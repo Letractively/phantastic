@@ -27,11 +27,58 @@ class Server
 
     protected $str_host = null;
 
+    /**
+     * Détermine si l’installation de PHP est capable de lancer un serveur web. 
+     * 
+     * @static
+     * @access public
+     * @return boolean
+     */
     public static function hasInternalServer()
     {
         return phpversion() >= '5.4.0';
     }
 
+
+    /**
+     * Détermine si Python est installé sur le système.
+     *
+     * Ce test est nécessaire dans le cas où la version de PHP est inférieure à la 5.4 
+     * pour savoir s’il est possible d’utiliser Python pour lancer un serveur 
+     * de développement. 
+     * 
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function hasPython()
+    {
+        $int_ret = null;
+
+        exec('python --version', $arr, $int_ret);
+
+        return $int_ret === 0;
+    }
+
+    /**
+     * Détermine si le système peut lancer un serveur de développement via PHP ou Python 
+     * 
+     * @static
+     * @access public
+     * @return boolean
+     */
+    public static function canRun()
+    {
+        return self::hasInternalServer() || self::hasPython();
+    }
+
+    /**
+     * Initialise le serveur avec une chaîne « hôte:port ».
+     * 
+     * @param string $str 
+     * @access public
+     * @return void
+     */
     public function setHost($str)
     {
         $this->str_host = $str;
