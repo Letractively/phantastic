@@ -40,6 +40,7 @@ class Permalink
 {
     const BASE  = '/';
     const TAG  = '/tags/:title.html';
+    const CATEGORY  = '/categories/:title.html';
     const POST = '/:categories/:year/:month/:day/:title.html';
 
     const PLACEHOLDER_CATEGORIES = ':categories';

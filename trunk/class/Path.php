@@ -180,14 +180,6 @@ class Path
         {
             // La catégorie elle-même, création de son chemin pour l’index
             $str_out = self::createIndex($str_out);
-
-            // maintenant, occupons-nous des catégories parentes
-            // TODO: à faire à part si on souhaite garder cette logique de fonctionnement
-            $arr_prov = array_slice($obj->getNode(), 0, count($obj->getNode()) -1);
-            
-            foreach($arr_prov as $str_node)
-            {
-            }
         }
 
         if(!file_exists(dirname($str_out)))
@@ -199,25 +191,5 @@ class Path
     }
 
 
-    /**
-     * Retourne l’objet Category pour l’objet File donné. 
-     * 
-     * @param File $file 
-     * @static
-     * @access public
-     * @return Category
-     */
-    public static function findCategoryFor(File $file)
-    {
-        if($file->getObjPath()->getPath(). Path::getDirectorySeparator() == Path::getSrcPost())
-        {
-            $key = Path::getDirectorySeparator();
-        }
-        else
-        {
-            $key = preg_replace('@'.Path::getSrcPost().'@', '',$file->getObjPath()->getPath());
-        }
-        return Category::getHier($key);
-    }
 
 }

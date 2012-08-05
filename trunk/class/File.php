@@ -27,6 +27,7 @@ class File
     protected $id = null;
     protected $obj_path = null;
     protected $str_url = null;
+    protected $str_cat_key = null;
     protected $obj_head = null;
     protected $str_content = null;
 
@@ -147,10 +148,9 @@ class File
         $url->setDay($this->getDay());
 
         // Les catégories n’existent que pour les Posts
-        if($this->isPost())
+        if($this->hasCategory())
         {
-            $cat = Path::findCategoryFor($this);
-            $url->setCategories($cat);
+            $url->setCategories($this->getCategory());
         }
 
 
@@ -164,6 +164,39 @@ class File
             throw new \Exception('Issue occured while building URL!');
         }
     }
+
+    public function hasCategory()
+    {
+        return is_object($this->getCategory());
+    }
+
+    public function getCategory()
+    {
+        if($this->isPost())
+        {
+            if(is_null($this->str_cat_key))
+            {
+                if($this->getObjPath()->getPath(). Path::getDirectorySeparator() == Path::getSrcPost())
+                {
+                    $key = Path::getDirectorySeparator();
+                }
+                else
+                {
+                    $key = preg_replace('@'.Path::getSrcPost().'@', '',$this->getObjPath()->getPath());
+                }
+
+                $this->str_cat_key = $key;
+            }
+
+            return Category::getHier($this->str_cat_key);
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+
 
     public function getYear()
     {

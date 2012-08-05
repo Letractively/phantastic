@@ -56,7 +56,7 @@ class Generator
      */
     public function getData()
     {
-        $it = new RecursiveDirectoryIterator("src/");
+        $it = new RecursiveDirectoryIterator(Path::getSrc());
         foreach(new RecursiveIteratorIterator($it) as $file)
         {
             if($file->isFile())
@@ -122,6 +122,22 @@ class Generator
         return $this->str_cat_list;
     }
 
+    protected static function extractInfo(File $f)
+    {
+        $arr_out = array();
+
+        foreach($f->getHeader() as $k => $v)
+        {
+            $arr_out[$k] = $v;
+        }
+
+        $arr_out['content'] = $f->getContent();
+        $arr_out['url'] = $f->getUrl();
+        $arr_out['type'] = $f->isPost() ? 'post' : 'page';
+
+        return (object) $arr_out;
+    }
+
     public function render()
     {
         foreach($this->arr_file as $f)
@@ -130,6 +146,7 @@ class Generator
             {
                 //TODO: C’est probablement ici que je devrai m’occuper des next/prev…
                 $t = new Template($f->getHeader()->layout);
+
                 
                 foreach($f->getHeader() as $k => $v)
                 {
@@ -157,14 +174,16 @@ class Generator
         {
             $t = new Template(Template::TAG_PAGE);
             $t->assign('title', $tag->getName());
-            $arrProv = array();
+
+
+            $arr_prov = array();
 
             foreach($tag->getFileIds() as $id)
             {
-                $arrProv[] = $this->arr_file[$id];
+                $arr_prov[] = self::extractInfo($this->arr_file[$id]);
             }
 
-            $t->assign('posts', $arrProv);
+            $t->assign('posts', $arr_prov);
             $t->assign('tag_cloud', $this->renderTagCloud());
             $t->assign('cat_list', $this->renderCatList());
             $t->assign('site_name', Config::getInstance()->getName());
@@ -177,12 +196,59 @@ class Generator
 
     public function renderCategoryPages()
     {
+        $arr_tree = Category::getTree();
+        
         foreach(Category::getHier() as $str_slug => $obj_cat)
         {
             if($str_slug != '/') // cas particulier des articles sans catégorie
             {
+                //var_dump($str_slug);
+                //var_dump($obj_cat->getFileIds());
+                //var_dump($obj_cat->getNode());
+
+
+                
                 //var_dump(Path::build($obj_cat));
+                $t = new Template(Template::CATEGORY_PAGE);
+                $t->assign('title', $obj_cat->getName());
+
+                $arr_prov_file = array();
+
+                foreach($obj_cat->getFileIds() as $id)
+                {
+                    $arr_prov_file[] = self::extractInfo($this->arr_file[$id]);
+                }
+
+                $arr_prov_cat = array();
+
+                foreach($obj_cat->getNode() as $str_node)
+                {
+                    $arr_prov_cat[] = sprintf('["%s"]', $str_node);
+                }
+
+                $arr_prov_cat = array_keys(eval(sprintf('return $arr_tree%s;', implode('', $arr_prov_cat))));
+
+                $arr_prov_cat2 = array();
+
+                foreach($arr_prov_cat as $str)
+                {
+                    $arr_prov_cat2[] = (object) array(
+                        'url' => $obj_cat->getUrl() . $str,
+                        'title' => Config::getInstance()->getCategory($str)
+                    );
+                }
+                
+                $t->assign('posts', $arr_prov_file);
+                $t->assign('cats', $arr_prov_cat2);
+                $t->assign('tag_cloud', $this->renderTagCloud());
+                $t->assign('cat_list', $this->renderCatList());
+                $t->assign('site_name', Config::getInstance()->getName());
+                $t->assign('site_base', Config::getInstance()->getBase());
+                $t->assign('site_meta', Config::getInstance()->getMeta());
+
+                file_put_contents(Path::build($obj_cat), $t->render());
             }
         }
+        
     }
 }

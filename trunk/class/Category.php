@@ -328,8 +328,27 @@ class Category
         }
     }
 
+    /*
     public function getUrl($full = false)
     {
         return Permalink::cleanUrl($this->getSlug());
     }
+     */
+
+    
+    public function getUrl($full = false)
+    {
+        $url = new Permalink(Config::getInstance()->getPermalinkCategory());
+        $url->setTitle($this->getSlug());
+
+        if($url->isOk())
+        {
+            return $url->getUrl($full);
+        }
+        else
+        {
+            throw new \Exception('Issue occured while building category’s URL!');
+        }
+    }
+
 }

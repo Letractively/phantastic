@@ -52,6 +52,8 @@ class Config
     protected $str_base = null;
     
     protected $str_permalink_tag = null;
+    
+    protected $str_permalink_category = null;
 
     protected $str_permalink_post = null;
     
@@ -108,6 +110,7 @@ class Config
 
         $this->str_base = Permalink::BASE;
         $this->str_permalink_tag = Permalink::TAG;
+        $this->str_permalink_category = Permalink::CATEGORY;
         $this->str_permalink_post = Permalink::POST;
 
         if(!is_null(self::$mixed_yaml))
@@ -131,6 +134,9 @@ class Config
 
             if(isset(self::$mixed_yaml->permalink['tag']))
                 $this->setPermalinkTag(self::$mixed_yaml->permalink['tag']);
+            
+            if(isset(self::$mixed_yaml->permalink['category']))
+                $this->setPermalinkCategory(self::$mixed_yaml->permalink['category']);
             
             if(isset(self::$mixed_yaml->permalink['post']))
                 $this->setPermalinkPost(self::$mixed_yaml->permalink['post']);
@@ -227,6 +233,11 @@ class Config
         $this->str_permalink_tag = $str;
     }
 
+    public function setPermalinkCategory($str)
+    {
+        $this->str_permalink_category = $str;
+    }
+
     public function setPermalinkPost($str)
     {
         $this->str_permalink_post = $str;
@@ -304,6 +315,11 @@ class Config
     {
         return $this->arr_categories;
     }
+    
+    public function getCategory($str)
+    {
+        return $this->arr_categories[$str];
+    }
 
     public function getBase()
     {
@@ -313,6 +329,11 @@ class Config
     public function getPermalinkTag()
     {
         return $this->str_permalink_tag;
+    }
+    
+    public function getPermalinkCategory()
+    {
+        return $this->str_permalink_category;
     }
     
     public function getPermalinkPost()
