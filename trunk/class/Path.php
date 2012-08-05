@@ -59,7 +59,7 @@ class Path
      * 
      * Si le chemin se termine déjà par un fichier, retourne juste le chemin sans changement. 
      * Cette méthode est utile dans le cas des chemins des Posts ou des Pages, 
-     * quand l’URL voulu n’a pas d’estension.
+     * quand l’URL voulu n’a pas d’extension.
      *
      * @param string $str_path 
      * @static
@@ -68,7 +68,7 @@ class Path
      */
     public static function createIndex($str_path)
     {
-        if(!preg_match(sprintf('@%s[a-z\.]+$@', self::getDirectorySeparator()), $str_path))
+        if(!preg_match(sprintf('@%s[a-z\.]+\.[a-z]+$@', self::getDirectorySeparator()), $str_path))
         {
             $str_path = $str_path . self::getDirectorySeparator() . 'index.html';
         }
@@ -190,6 +190,14 @@ class Path
         return $str_out;
     }
 
+
+    public static function buildForEmptyCategory($str)
+    {
+        //$str_out = self::cleanPath(self::getDest() . $obj->getUrl());
+        $str_out = $str;
+        $str_out = self::createIndex($str_out);
+        return $str_out;
+    }
 
 
 }

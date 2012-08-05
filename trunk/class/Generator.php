@@ -21,6 +21,7 @@ namespace Malenki\Phantastic;
 
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use DirectoryIterator;
 
 /**
  * Le générateur, parcourt l’arborescence et collecte les données pour ensuite 
@@ -56,8 +57,8 @@ class Generator
      */
     public function getData()
     {
-        $it = new RecursiveDirectoryIterator(Path::getSrc());
-        foreach(new RecursiveIteratorIterator($it) as $file)
+        $obj_iter = new RecursiveDirectoryIterator(Path::getSrc());
+        foreach(new RecursiveIteratorIterator($obj_iter) as $file)
         {
             if($file->isFile())
             {
@@ -202,13 +203,6 @@ class Generator
         {
             if($str_slug != '/') // cas particulier des articles sans catégorie
             {
-                //var_dump($str_slug);
-                //var_dump($obj_cat->getFileIds());
-                //var_dump($obj_cat->getNode());
-
-
-                
-                //var_dump(Path::build($obj_cat));
                 $t = new Template(Template::CATEGORY_PAGE);
                 $t->assign('title', $obj_cat->getName());
 
@@ -247,6 +241,62 @@ class Generator
                 $t->assign('site_meta', Config::getInstance()->getMeta());
 
                 file_put_contents(Path::build($obj_cat), $t->render());
+            }
+        }
+
+        $arr_dir = array();
+
+        //TODO: virer le truc en dur…
+        $obj_iter = new RecursiveDirectoryIterator('out/categories/', RecursiveDirectoryIterator::KEY_AS_PATHNAME);
+        foreach(new RecursiveIteratorIterator($obj_iter, RecursiveIteratorIterator::CHILD_FIRST) as $file)
+        {
+            if($file->isDir())
+            {
+                if(!in_array(dirname($file->__toString()), $arr_dir))
+                {
+                    $arr_dir[] = dirname($file->__toString());
+                }
+            }
+        }
+
+        
+        foreach($arr_dir as $str_dir)
+        {
+            $obj_dir_iter = new DirectoryIterator($str_dir);
+
+            $bool_has_index = false;
+
+            $arr_last = array();
+
+            foreach($obj_dir_iter as $obj_file)
+            {
+                if($obj_file->isFile() && ($obj_file->getFileName() == 'index.html'))
+                {
+                    $bool_has_index = true;
+                }
+
+                if($obj_file->isDir() && !$obj_file->isDot())
+                {
+                    $arr_last[] = (object) array(
+                        'url' =>  dirname($str_dir) . $obj_file->getFileName(), //TODO: Avoir un moyen de récupérer l’URL proprement
+                        'title' => Config::getInstance()->getCategory($obj_file->getFileName())
+                    );
+                }
+            }
+
+            if(!$bool_has_index)
+            {
+                $t = new Template(Template::CATEGORY_PAGE);
+                $t->assign('title', 'TODO'); //TODO: à finir !
+                $t->assign('posts', array());
+                $t->assign('cats', $arr_last);
+                $t->assign('tag_cloud', $this->renderTagCloud());
+                $t->assign('cat_list', $this->renderCatList());
+                $t->assign('site_name', Config::getInstance()->getName());
+                $t->assign('site_base', Config::getInstance()->getBase());
+                $t->assign('site_meta', Config::getInstance()->getMeta());
+
+                file_put_contents(Path::buildForEmptyCategory($str_dir), $t->render());
             }
         }
         
