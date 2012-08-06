@@ -105,6 +105,11 @@ class Category
             }
         }
     }
+
+    public static function isEmpty()
+    {
+        return count(self::$arr_hier) == 1; //Il y a toujours la catégorie racine
+    }
     
     protected static function getTreeRecursive(Category $obj_cat, $arr_tree)
     {
