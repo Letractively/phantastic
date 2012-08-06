@@ -199,5 +199,11 @@ class Path
         return $str_out;
     }
 
+    public static function getDestCategory()
+    {
+        $l = new Permalink(Config::getInstance()->getPermalinkCategory());
+        $l->setTitle('');
+        return self::cleanPath(self::getDest() . preg_replace('/\.[hH][tT][mM][lL]$/', '', $l->getUrl()));
+    }
 
 }

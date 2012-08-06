@@ -315,7 +315,12 @@ class Config
     {
         return $this->arr_categories;
     }
-    
+
+    public function hasCategory($str)
+    {
+        return isset($this->arr_categories[$str]);
+    }
+
     public function getCategory($str)
     {
         return $this->arr_categories[$str];
