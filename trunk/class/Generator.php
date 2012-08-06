@@ -246,8 +246,7 @@ class Generator
 
         $arr_dir = array();
 
-        //TODO: virer le truc en dur…
-        $obj_iter = new RecursiveDirectoryIterator('out/categories/', RecursiveDirectoryIterator::KEY_AS_PATHNAME);
+        $obj_iter = new RecursiveDirectoryIterator(Path::getDestCategory(), RecursiveDirectoryIterator::KEY_AS_PATHNAME);
         foreach(new RecursiveIteratorIterator($obj_iter, RecursiveIteratorIterator::CHILD_FIRST) as $file)
         {
             if($file->isDir())
@@ -278,7 +277,7 @@ class Generator
                 if($obj_file->isDir() && !$obj_file->isDot())
                 {
                     $arr_last[] = (object) array(
-                        'url' =>  dirname($str_dir) . $obj_file->getFileName(), //TODO: Avoir un moyen de récupérer l’URL proprement
+                        'url' =>  preg_replace(sprintf('@^%s@', Path::getDest()), '', $obj_file->getPathname()), //TODO: Avoir un moyen de récupérer l’URL proprement
                         'title' => Config::getInstance()->getCategory($obj_file->getFileName())
                     );
                 }
@@ -286,8 +285,16 @@ class Generator
 
             if(!$bool_has_index)
             {
+                $str_slug_cat = preg_replace(sprintf('@^%s@', Path::getDestCategory()), '', $str_dir);
                 $t = new Template(Template::CATEGORY_PAGE);
-                $t->assign('title', 'TODO'); //TODO: à finir !
+                if(Config::getInstance()->hasCategory($str_slug_cat))
+                {
+                    $t->assign('title', Config::getInstance()->getCategory($str_slug_cat));
+                }
+                else
+                {
+                    $t->assign('title', null);
+                }
                 $t->assign('posts', array());
                 $t->assign('cats', $arr_last);
                 $t->assign('tag_cloud', $this->renderTagCloud());
@@ -299,6 +306,7 @@ class Generator
                 file_put_contents(Path::buildForEmptyCategory($str_dir), $t->render());
             }
         }
+
         
     }
 }
