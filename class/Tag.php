@@ -42,11 +42,6 @@ class Tag
 
     }
 
-    public static function isEmpty()
-    {
-        return count(self::$arr_cloud) == 0;
-    }
-
     public static function getCloud()
     {
         return self::$arr_cloud;

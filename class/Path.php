@@ -35,31 +35,6 @@ class Path
     const TEMPLATE = 'template/'; // chemin par défaut pour les templates
     const TAGS = 'tags/'; // chemin de destination par défaut des tags
 
-    protected static $str_app_root = null;
-
-    public static function setAppRoot($str)
-    {
-        self::$str_app_root = $str;
-    }
-
-    public static function getAppRoot()
-    {
-        return self::cleanPath(self::$str_app_root . self::getDirectorySeparator());
-    }
-
-    public static function getLib($str_lib_path = null)
-    {
-        $str_out = self::cleanPath(
-            self::getAppRoot() . 'lib' . self::getDirectorySeparator()
-        );
-
-        if(is_string($str_lib_path) && strlen($str_lib_path))
-        {
-            $str_out = self::cleanPath($str_out . $str_lib_path);
-        }
-
-        return $str_out;
-    }
 
     /**
      * Débarasse le chemin des séparateurs de répertoire doublons. 
@@ -68,7 +43,6 @@ class Path
      * @static
      * @access public
      * @return string
-     * @todo Renommer en clean() car redondant avec le nom de la classe.
      */
     public static function cleanPath($str_path)
     {

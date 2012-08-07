@@ -170,16 +170,13 @@ class App
         $g = new Generator();
         $g->getData();
         $g->render();
-        
-        if(!Tag::isEmpty())
-        {
-            $g->renderTagPages();
-        }
+        $g->renderTagPages();
 
-        if(!Category::isEmpty())
-        {
-            $g->renderCategoryPages();
-        }
+        //Ce qui suit n’a aucun intérêt car les catégories font parties intégrantes des 
+        //fichiers.
+        //TODO: Euh, en fait si :) Il faut mettre des pages au niveau des nœuds non finaux.
+        $g->renderCategoryPages();
+
         //debug, test…
         //var_dump(History::getLast());
         //var_dump(Category::getTree());
