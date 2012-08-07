@@ -18,6 +18,7 @@
  * along with Phantastic.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 $str_root = __DIR__;
 
 include($str_root . '/lib/phpmarkdown/markdown.php');
@@ -37,6 +38,7 @@ include_once($str_root . '/class/Arg.php');
 include_once($str_root . '/class/Server.php');
 include_once($str_root . '/class/App.php');
 
+Malenki\Phantastic\Path::setAppRoot($str_root);
 
 $phantastic = new Malenki\Phantastic\App();
 $phantastic->setOpt();

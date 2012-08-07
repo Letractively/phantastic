@@ -68,9 +68,9 @@ class Parser
         {
             //TODO: Tester si la lib est bien installée, sinon fatal error.
             //TODO: Inclure tous les fichiers de la lib
-            include_once('lib/yaml/Parser.php');
-            include_once('lib/yaml/Inline.php');
-            include_once('lib/yaml/Unescaper.php');
+            include_once(Path::getLib('yaml/Parser.php'));
+            include_once(Path::getLib('yaml/Inline.php'));
+            include_once(Path::getLib('yaml/Unescaper.php'));
             $yaml = new \Symfony\Component\Yaml\Parser();
 
             if($is_file)
