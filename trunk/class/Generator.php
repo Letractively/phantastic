@@ -132,7 +132,23 @@ class Generator
             $arr_out[$k] = $v;
         }
 
+        $arr_cat = array();
+        $arr_cat_prov = array();
+
+        foreach($f->getCategory()->getNode() as $str_node)
+        {
+            $l = new Permalink(Config::getInstance()->getPermalinkCategory());
+            $arr_cat_prov[] = $str_node;
+            $l->setTitle(implode('/', $arr_cat_prov));
+            $arr_cat[] = array(
+                'title' => Config::getInstance()->getCategory($str_node),
+                'url'   => $l->getUrl()
+            );
+        }
+
         $arr_out['content'] = $f->getContent();
+        $arr_out['category'] = $f->getCategory();
+        $arr_out['categories_breadcrumb'] = $arr_cat;
         $arr_out['url'] = $f->getUrl();
         $arr_out['type'] = $f->isPost() ? 'post' : 'page';
 
@@ -155,8 +171,18 @@ class Generator
                 }
 
                 $t->setContent($f->getContent());
+                
+                $arr_prov = array();
+
+                foreach(History::getLast() as $id)
+                {
+                    $arr_prov[] = self::extractInfo($this->arr_file[$id]);
+                }
+
+                $t->assign('last_posts', $arr_prov);
                 $t->assign('tag_cloud', $this->renderTagCloud());
                 $t->assign('cat_list', $this->renderCatList());
+                $t->assign('categories', Category::getHier());
                 $t->assign('site_name', Config::getInstance()->getName());
                 $t->assign('site_base', Config::getInstance()->getBase());
                 $t->assign('site_meta', Config::getInstance()->getMeta());
