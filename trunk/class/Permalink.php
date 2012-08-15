@@ -284,7 +284,7 @@ class Permalink
 
             $this->str_url = $str_out;
         }
-        
+
         return Permalink::cleanUrl($this->str_url);
     }
 

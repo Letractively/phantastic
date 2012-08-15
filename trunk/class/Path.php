@@ -34,6 +34,7 @@ class Path
     const POST = 'post/'; // chemin relatif à SRC pour les Posts
     const TEMPLATE = 'template/'; // chemin par défaut pour les templates
     const TAGS = 'tags/'; // chemin de destination par défaut des tags
+    const CATEGORIES = 'categories/'; // chemin de destination par défaut des catégories
 
     protected static $str_app_root = null;
 
