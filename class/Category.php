@@ -108,7 +108,13 @@ class Category
 
     public static function isEmpty()
     {
-        return count(self::$arr_hier) == 1; //Il y a toujours la catégorie racine
+        if(array_key_exists('/', self::$arr_hier))
+        {
+            //Il y a toujours la catégorie racine
+            return count(self::$arr_hier) == 1; 
+        }
+        
+        return count(self::$arr_hier) == 0; 
     }
     
     protected static function getTreeRecursive(Category $obj_cat, $arr_tree)
