@@ -219,6 +219,19 @@ class Generator
             
             file_put_contents(Path::build($tag), $t->render());
         }
+
+
+
+        $t = new Template(Template::TAG_INDEX);
+
+        $t->assign('tag_cloud', $this->renderTagCloud());
+        $t->assign('cat_list', $this->renderCatList());
+        $t->assign('site_name', Config::getInstance()->getName());
+        $t->assign('site_base', Config::getInstance()->getBase());
+        $t->assign('site_meta', Config::getInstance()->getMeta());
+        
+        file_put_contents(Path::buildForRootTag(), $t->render());
+
     }
 
     public function renderCategoryPages()
