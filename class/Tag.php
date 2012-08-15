@@ -119,6 +119,12 @@ class Tag
             self::computeStyle();
         }
     }
+    
+    
+    public static function get($str_name)
+    {
+        return self::$arr_cloud[Permalink::createSlug($str_name)];
+    }
 
 
     /**

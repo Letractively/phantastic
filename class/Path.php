@@ -225,6 +225,12 @@ class Path
         $str_out = self::createIndex($str_out);
         return $str_out;
     }
+    
+    public static function buildForRootTag()
+    {
+        $str_out = self::createIndex(self::getDestTag());
+        return $str_out;
+    }
 
     public static function getDestCategory()
     {
@@ -233,4 +239,10 @@ class Path
         return self::cleanPath(self::getDest() . preg_replace('/\.[hH][tT][mM][lL]$/', '', $l->getUrl()));
     }
 
+    public static function getDestTag()
+    {
+        $l = new Permalink(Config::getInstance()->getPermalinkTag());
+        $l->setTitle('');
+        return self::cleanPath(self::getDest() . preg_replace('/\.[hH][tT][mM][lL]$/', '', $l->getUrl()));
+    }
 }
