@@ -339,13 +339,6 @@ class Category
         }
     }
 
-    /*
-    public function getUrl($full = false)
-    {
-        return Permalink::cleanUrl($this->getSlug());
-    }
-     */
-
     
     public function getUrl($full = false)
     {
