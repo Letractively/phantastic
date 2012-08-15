@@ -134,21 +134,39 @@ class Generator
 
         $arr_cat = array();
         $arr_cat_prov = array();
-
-        foreach($f->getCategory()->getNode() as $str_node)
+        
+        if($f->hasCategory())
         {
-            $l = new Permalink(Config::getInstance()->getPermalinkCategory());
-            $arr_cat_prov[] = $str_node;
-            $l->setTitle(implode('/', $arr_cat_prov));
-            $arr_cat[] = array(
-                'title' => Config::getInstance()->getCategory($str_node),
-                'url'   => $l->getUrl()
-            );
+            foreach($f->getCategory()->getNode() as $str_node)
+            {
+                $l = new Permalink(Config::getInstance()->getPermalinkCategory());
+                $arr_cat_prov[] = $str_node;
+                $l->setTitle(implode('/', $arr_cat_prov));
+                $arr_cat[] = array(
+                    'title' => Config::getInstance()->getCategory($str_node),
+                    'url'   => $l->getUrl()
+                );
+            }
+        }
+
+        $arr_tag = array();
+        if(isset($f->getHeader()->tags) && count($f->getHeader()->tags))
+        {
+            foreach($f->getHeader()->tags as $str)
+            {
+                $l = new Permalink(Config::getInstance()->getPermalinkTag());
+                $l->setTitle(Permalink::createSlug($str));
+                $arr_tag[] = array(
+                    'title' => $str,
+                    'url'   => $l->getUrl()
+                );
+            }
         }
 
         $arr_out['content'] = $f->getContent();
         $arr_out['category'] = $f->getCategory();
         $arr_out['categories_breadcrumb'] = $arr_cat;
+        $arr_out['tags_list'] = $arr_tag;
         $arr_out['url'] = $f->getUrl();
         $arr_out['type'] = $f->isPost() ? 'post' : 'page';
 
@@ -164,19 +182,16 @@ class Generator
                 //TODO: C’est probablement ici que je devrai m’occuper des next/prev…
                 $t = new Template($f->getHeader()->layout);
 
-                
-                foreach($f->getHeader() as $k => $v)
-                {
-                    $t->assign($k, $v);
-                }
-
-                $t->setContent($f->getContent());
-                
                 $arr_prov = array();
 
                 foreach(History::getLast() as $id)
                 {
                     $arr_prov[] = self::extractInfo($this->arr_file[$id]);
+                }
+
+                foreach(self::extractInfo($f) as $k => $v)
+                {
+                    $t->assign($k, $v);
                 }
 
                 $t->assign('last_posts', $arr_prov);
