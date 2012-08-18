@@ -168,6 +168,7 @@ class Generator
         $arr_out['categories_breadcrumb'] = $arr_cat;
         $arr_out['tags_list'] = $arr_tag;
         $arr_out['url'] = $f->getUrl();
+        $arr_out['canonical'] = preg_replace('@/+$@', '', Config::getInstance()->getBase()) . $f->getUrl();
         $arr_out['type'] = $f->isPost() ? 'post' : 'page';
 
         return (object) $arr_out;

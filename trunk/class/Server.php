@@ -89,7 +89,10 @@ class Server
      */
     public static function canRun()
     {
-        return self::hasInternalServer() || self::hasPython();
+        return 
+            (self::hasInternalServer() || self::hasPython())
+            &&
+            (Config::getInstance()->serverAvailable());
     }
 
     /**
