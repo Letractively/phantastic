@@ -186,7 +186,7 @@ class App
         //var_dump(Category::getFileIdsAtLevel());
 
 
-        if(Config::getInstance()->getServer())
+        if(Config::getInstance()->serverAvailable())
         {
             if(Server::canRun())
             {

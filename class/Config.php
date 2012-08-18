@@ -123,7 +123,7 @@ class Config
 
             // si server actif, désactive l’URL de base pour avoir une 
             // navigation fonctionnnelle
-            if(isset(self::$mixed_yaml->server))
+            if(isset(self::$mixed_yaml->server) && self::$mixed_yaml->server == true)
             {
                 $this->setServer(self::$mixed_yaml->server);
             }
@@ -150,6 +150,10 @@ class Config
     }
 
 
+    public function serverAvailable()
+    {
+        return(isset(self::$mixed_yaml->server) && self::$mixed_yaml->server == true);
+    } 
 
     public static function getInstance()
     {

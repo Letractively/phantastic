@@ -80,7 +80,7 @@ class Permalink
     }
 
     /**
-     * Enlève les slashes surnumérairse résultant parfois de la construction de l’URL. 
+     * Enlève les slashes surnuméraires résultant parfois de la construction de l’URL. 
      * 
      * @param string $url 
      * @static
