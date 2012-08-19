@@ -95,7 +95,7 @@ class Path
      */
     public static function createIndex($str_path)
     {
-        if(!preg_match(sprintf('@%s[a-z\.]+\.[a-z]+$@', self::getDirectorySeparator()), $str_path))
+        if(!preg_match(sprintf('@%s[a-z\.\-]+\.[a-z]+$@', self::getDirectorySeparator()), $str_path))
         {
             $str_path = $str_path . self::getDirectorySeparator() . 'index.html';
         }
