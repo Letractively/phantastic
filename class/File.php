@@ -196,7 +196,27 @@ class File
         }
     }
 
+    /**
+     * Obtient la date au format ISO 8601 utilisé dans les flux Atom 
+     * 
+     * @access public
+     * @return string
+     */
+    public function getDateAtom()
+    {
+        return(date('c', $this->obj_path->getMTime()));
+    }
 
+    /**
+     * Obtient la date du fichier au format RFC822, utile pour la génération des RSS. 
+     * 
+     * @access public
+     * @return string
+     */
+    public function getDateRss()
+    {
+        return(date('r', $this->obj_path->getMTime()));
+    }
 
     public function getYear()
     {
