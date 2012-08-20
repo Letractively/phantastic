@@ -21,7 +21,7 @@ namespace Malenki\Phantastic;
 
 class History
 {
-    const LAST_HOME = 3;
+    const LAST_HOME = 7;
 
     protected static $arr_hist = array();
 

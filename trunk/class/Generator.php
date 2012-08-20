@@ -168,6 +168,8 @@ class Generator
         $arr_out['categories_breadcrumb'] = $arr_cat;
         $arr_out['tags_list'] = $arr_tag;
         $arr_out['url'] = $f->getUrl();
+        $arr_out['date_rss'] = $f->getDateRss();
+        $arr_out['date_atom'] = $f->getDateAtom();
         $arr_out['canonical'] = preg_replace('@/+$@', '', Config::getInstance()->getBase()) . $f->getUrl();
         $arr_out['type'] = $f->isPost() ? 'post' : 'page';
 
@@ -200,6 +202,7 @@ class Generator
                 $t->assign('cat_list', $this->renderCatList());
                 $t->assign('categories', Category::getHier());
                 $t->assign('site_name', Config::getInstance()->getName());
+                $t->assign('site_description', Config::getInstance()->getDescription());
                 $t->assign('site_base', Config::getInstance()->getBase());
                 $t->assign('site_meta', Config::getInstance()->getMeta());
                 file_put_contents(Path::build($f), $t->render());
@@ -230,6 +233,7 @@ class Generator
             $t->assign('tag_cloud', $this->renderTagCloud());
             $t->assign('cat_list', $this->renderCatList());
             $t->assign('site_name', Config::getInstance()->getName());
+            $t->assign('site_description', Config::getInstance()->getDescription());
             $t->assign('site_base', Config::getInstance()->getBase());
             $t->assign('site_meta', Config::getInstance()->getMeta());
             
@@ -243,6 +247,7 @@ class Generator
         $t->assign('tag_cloud', $this->renderTagCloud());
         $t->assign('cat_list', $this->renderCatList());
         $t->assign('site_name', Config::getInstance()->getName());
+        $t->assign('site_description', Config::getInstance()->getDescription());
         $t->assign('site_base', Config::getInstance()->getBase());
         $t->assign('site_meta', Config::getInstance()->getMeta());
         
@@ -292,6 +297,7 @@ class Generator
                 $t->assign('tag_cloud', $this->renderTagCloud());
                 $t->assign('cat_list', $this->renderCatList());
                 $t->assign('site_name', Config::getInstance()->getName());
+                $t->assign('site_description', Config::getInstance()->getDescription());
                 $t->assign('site_base', Config::getInstance()->getBase());
                 $t->assign('site_meta', Config::getInstance()->getMeta());
 
@@ -355,6 +361,7 @@ class Generator
                 $t->assign('tag_cloud', $this->renderTagCloud());
                 $t->assign('cat_list', $this->renderCatList());
                 $t->assign('site_name', Config::getInstance()->getName());
+                $t->assign('site_description', Config::getInstance()->getDescription());
                 $t->assign('site_base', Config::getInstance()->getBase());
                 $t->assign('site_meta', Config::getInstance()->getMeta());
 

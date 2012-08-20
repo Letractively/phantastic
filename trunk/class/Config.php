@@ -43,6 +43,8 @@ class Config
     
     protected $str_meta = null;
     
+    protected $str_description = null;
+    
     protected $str_timezone = 'UTC';
     
     protected $str_server = Server::HOST;
@@ -117,6 +119,7 @@ class Config
         {
             $this->setName(self::$mixed_yaml->name);
             $this->setMeta(self::$mixed_yaml->meta);
+            $this->setDescription(self::$mixed_yaml->description);
 
             if(isset(self::$mixed_yaml->timezone))
                 $this->setTimezone(self::$mixed_yaml->timezone);
@@ -172,6 +175,11 @@ class Config
         $this->str_name = $str;
     }
 
+
+    public function setDescription($str)
+    {
+        $this->str_description = $str;
+    }
 
 
     public function setMeta($str)
@@ -303,6 +311,11 @@ class Config
     public function getMeta()
     {
         return $this->str_meta;
+    }
+
+    public function getDescription()
+    {
+        return $this->str_description;
     }
 
     public function getTimezone()
