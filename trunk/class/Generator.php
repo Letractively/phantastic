@@ -33,6 +33,7 @@ class Generator
     protected $str_src = array();
     protected $str_tag_cloud = null;
     protected $str_cat_list = null;
+    protected $str_root_cat_list = null;
 
     public function __construct()
     {
@@ -122,6 +123,31 @@ class Generator
 
         return $this->str_cat_list;
     }
+    
+    public function renderRootCatList()
+    {
+        $arr_prov = array();
+
+        foreach(Category::getHier() as $c)
+        {
+            if(!in_array($c->getRootParent()->getName(), $arr_prov))
+            {
+                $arr_prov[$c->getRootParent()->getName()] = $c->getRootParent();
+            }
+        }
+
+        ksort($arr_prov);
+
+        if(is_null($this->str_root_cat_list))
+        {
+            $t = new Template(Template::ROOT_CATEGORIES);
+            $t->assign('root_categories', $arr_prov);
+            $this->str_root_cat_list = $t->render();
+        }
+
+
+        return $this->str_root_cat_list;
+    }
 
     protected static function extractInfo(File $f)
     {
@@ -200,6 +226,7 @@ class Generator
                 $t->assign('last_posts', $arr_prov);
                 $t->assign('tag_cloud', $this->renderTagCloud());
                 $t->assign('cat_list', $this->renderCatList());
+                $t->assign('root_cat_list', $this->renderRootCatList());
                 $t->assign('categories', Category::getHier());
                 $t->assign('site_name', Config::getInstance()->getName());
                 $t->assign('site_description', Config::getInstance()->getDescription());
@@ -232,6 +259,7 @@ class Generator
             $t->assign('posts', $arr_prov);
             $t->assign('tag_cloud', $this->renderTagCloud());
             $t->assign('cat_list', $this->renderCatList());
+            $t->assign('root_cat_list', $this->renderRootCatList());
             $t->assign('site_name', Config::getInstance()->getName());
             $t->assign('site_description', Config::getInstance()->getDescription());
             $t->assign('site_base', Config::getInstance()->getBase());
@@ -246,6 +274,7 @@ class Generator
 
         $t->assign('tag_cloud', $this->renderTagCloud());
         $t->assign('cat_list', $this->renderCatList());
+        $t->assign('root_cat_list', $this->renderRootCatList());
         $t->assign('site_name', Config::getInstance()->getName());
         $t->assign('site_description', Config::getInstance()->getDescription());
         $t->assign('site_base', Config::getInstance()->getBase());
@@ -296,6 +325,7 @@ class Generator
                 $t->assign('cats', $arr_prov_cat2);
                 $t->assign('tag_cloud', $this->renderTagCloud());
                 $t->assign('cat_list', $this->renderCatList());
+                $t->assign('root_cat_list', $this->renderRootCatList());
                 $t->assign('site_name', Config::getInstance()->getName());
                 $t->assign('site_description', Config::getInstance()->getDescription());
                 $t->assign('site_base', Config::getInstance()->getBase());
@@ -360,6 +390,7 @@ class Generator
                 $t->assign('cats', $arr_last);
                 $t->assign('tag_cloud', $this->renderTagCloud());
                 $t->assign('cat_list', $this->renderCatList());
+                $t->assign('root_cat_list', $this->renderRootCatList());
                 $t->assign('site_name', Config::getInstance()->getName());
                 $t->assign('site_description', Config::getInstance()->getDescription());
                 $t->assign('site_base', Config::getInstance()->getBase());

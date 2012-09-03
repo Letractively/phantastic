@@ -28,6 +28,7 @@ class Template
     
     const TAGS = 'tags';
     const CATEGORIES = 'categories';
+    const ROOT_CATEGORIES = 'root-categories';
 
     protected $arr_data = array();
     protected $str_tmpl = null;
