@@ -61,6 +61,8 @@ class Config
     
     protected $obj_dir = null;
 
+    protected $str_author = null;
+
 
 
     protected static function basicCheck($str)
@@ -149,6 +151,9 @@ class Config
             $this->setDestDir(self::$mixed_yaml->dir['dest']);
             $this->setTemplateDir(self::$mixed_yaml->dir['template']);
             
+            if(isset(self::$mixed_yaml->author))
+                $this->setAuthor(self::$mixed_yaml->author);
+            
         }
     }
 
@@ -166,6 +171,12 @@ class Config
         }
 
         return self::$obj_instance;
+    }
+
+    
+    public function setAuthor($str)
+    {
+        $this->str_author = $str;
     }
 
 
@@ -302,6 +313,12 @@ class Config
             throw new Exception('Custom destination directory must have a slash at the end.');
         }
     }
+    
+    public function getAuthor()
+    {
+        return $this->str_author;
+    }
+
 
     public function getName()
     {
