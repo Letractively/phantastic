@@ -179,6 +179,11 @@ class Generator
             $arr_out[$k] = $v;
         }
 
+        if(Config::getInstance()->getAuthor() && !isset($arr_out['author']))
+        {
+            $arr_out['author'] = Config::getInstance()->getAuthor();
+        }
+
         $arr_cat = array();
         $arr_cat_prov = array();
         
