@@ -54,7 +54,7 @@ class Generator
      * Parcourt l’arborescence à partir de la source définie auparavant.
      *
      * Le parcour se fait tout en créant les bons types de documents (posts, 
-     * pages ou fichiers autres) et en créant les tags.
+     * pages ou fichiers autres) et en créant les tags et maintenant un historique.
      */
     public function getData()
     {
@@ -89,7 +89,28 @@ class Generator
                     if($f->isPost())
                     {
                         Category::set($file->getPath())->addId($f->getId());
-                        History::set(date('Y-m-d H:i:s', $file->getMTime()))->addId($f->getId());
+
+                        if(
+                            isset($f->getHeader()->date)
+                            &&
+                            preg_match('/^([0-9]{4}-[0-9]{2}-[0-9]{2}|[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2})$/', $f->getHeader()->date)
+                        )
+                        {
+
+                            if(strlen($f->getHeader()->date) == 10)
+                            {
+                                // on met un horaire arbitraire
+                                History::set($f->getHeader()->date . ' 00:00:00')->addId($f->getId());
+                            }
+                            else
+                            {
+                                History::set($f->getHeader()->date)->addId($f->getId());
+                            }
+                        }
+                        else
+                        {
+                            History::set(date('Y-m-d H:i:s', $file->getMTime()))->addId($f->getId());
+                        }
                     }
                     
                 }
@@ -194,6 +215,7 @@ class Generator
         $arr_out['categories_breadcrumb'] = $arr_cat;
         $arr_out['tags_list'] = $arr_tag;
         $arr_out['url'] = $f->getUrl();
+        $arr_out['date'] = $f->getDate();
         $arr_out['date_rss'] = $f->getDateRss();
         $arr_out['date_atom'] = $f->getDateAtom();
         $arr_out['canonical'] = preg_replace('@/+$@', '', Config::getInstance()->getBase()) . $f->getUrl();

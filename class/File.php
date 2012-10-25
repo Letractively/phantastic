@@ -197,6 +197,28 @@ class File
     }
 
     /**
+     * Retourne un timestamp UNIX.
+     *
+     * Retourne le timestamp UNIX de la date du fichier, en prenant soit 
+     * l’attribut "date" de l’en-tête YAML, soit la date du fichier si cet 
+     * attribut n’existe pas. 
+     * 
+     * @access public
+     * @return integer
+     */
+    public function getDate()
+    {
+        if(isset($this->getHeader()->date))
+        {
+            return strtotime($this->getHeader()->date);
+        }
+        else
+        {
+            return $this->obj_path->getMTime();
+        }
+    }
+
+    /**
      * Obtient la date au format ISO 8601 utilisé dans les flux Atom 
      * 
      * @access public
@@ -204,7 +226,7 @@ class File
      */
     public function getDateAtom()
     {
-        return(date('c', $this->obj_path->getMTime()));
+        return(date('c', $this->getDate()));
     }
 
     /**
@@ -215,22 +237,36 @@ class File
      */
     public function getDateRss()
     {
-        return(date('r', $this->obj_path->getMTime()));
+        return(date('r', $this->getDate()));
     }
 
     public function getYear()
     {
-        return(date('Y', $this->obj_path->getMTime()));
+        return(date('Y', $this->getDate()));
     }
 
     public function getMonth()
     {
-        return(date('m', $this->obj_path->getMTime()));
+        return(date('m', $this->getDate()));
     }
 
     public function getDay()
     {
-        return(date('d', $this->obj_path->getMTime()));
+        return(date('d', $this->getDate()));
+    }
+    public function getHour()
+    {
+        return(date('H', $this->getDate()));
+    }
+    
+    public function getMinute()
+    {
+        return(date('i', $this->getDate()));
+    }
+
+    public function getSeconde()
+    {
+        return(date('s', $this->getDate()));
     }
 
     public function getSrcPath()
