@@ -29,7 +29,7 @@ use DirectoryIterator;
  */
 class Generator
 {
-    protected $arr_file = array();
+    protected static $arr_file = array();
     protected $str_src = array();
     protected $str_tag_cloud = null;
     protected $str_cat_list = null;
@@ -43,11 +43,11 @@ class Generator
 
     public function add(File $file)
     {
-        $this->arr_file[$file->getId()] = $file;
+        self::$arr_file[$file->getId()] = $file;
     }
 
     public function get($id){
-        return $this->arr_file[$id];
+        return self::$arr_file[$id];
     }
 
     /**
@@ -100,16 +100,16 @@ class Generator
                             if(strlen($f->getHeader()->date) == 10)
                             {
                                 // on met un horaire arbitraire
-                                History::set($f->getHeader()->date . ' 00:00:00')->addId($f->getId());
+                                History::set($f->getHeader()->date . ' 00:00:00')->setId($f->getId());
                             }
                             else
                             {
-                                History::set($f->getHeader()->date)->addId($f->getId());
+                                History::set($f->getHeader()->date)->setId($f->getId());
                             }
                         }
                         else
                         {
-                            History::set(date('Y-m-d H:i:s', $file->getMTime()))->addId($f->getId());
+                            History::set(date('Y-m-d H:i:s', $file->getMTime()))->setId($f->getId());
                         }
                     }
                     
@@ -210,6 +210,28 @@ class Generator
             }
         }
 
+
+        $str_date_key = date('Y-m-d H:i:s', $f->getDate());
+        $id_prev = History::getPrevFor($str_date_key);
+        $id_next = History::getNextFor($str_date_key);
+
+        $arr_out['has_prev'] = (boolean) $id_prev;
+        $arr_out['has_next'] = (boolean) $id_next;
+
+        if($id_prev)
+        {
+            $obj_prev = self::$arr_file[$id_prev];
+            $arr_out['prev_title'] = $obj_prev->getHeader()->title;
+            $arr_out['prev_url'] = $obj_prev->getUrl();
+        }
+
+        if($id_next)
+        {
+            $obj_next = self::$arr_file[$id_next];
+            $arr_out['next_title'] = $obj_next->getHeader()->title;
+            $arr_out['next_url'] = $obj_next->getUrl();
+        }
+
         $arr_out['content'] = $f->getContent();
         $arr_out['category'] = $f->getCategory();
         $arr_out['categories_breadcrumb'] = $arr_cat;
@@ -226,7 +248,7 @@ class Generator
 
     public function render()
     {
-        foreach($this->arr_file as $f)
+        foreach(self::$arr_file as $f)
         {
             if(!$f->isFile())
             {
@@ -237,7 +259,7 @@ class Generator
 
                 foreach(History::getLast() as $id)
                 {
-                    $arr_prov[] = self::extractInfo($this->arr_file[$id]);
+                    $arr_prov[] = self::extractInfo(self::$arr_file[$id]);
                 }
 
                 foreach(self::extractInfo($f) as $k => $v)
@@ -275,7 +297,7 @@ class Generator
 
             foreach($tag->getFileIds() as $id)
             {
-                $arr_prov[] = self::extractInfo($this->arr_file[$id]);
+                $arr_prov[] = self::extractInfo(self::$arr_file[$id]);
             }
 
             $t->assign('posts', $arr_prov);
@@ -321,7 +343,7 @@ class Generator
 
                 foreach($obj_cat->getFileIds() as $id)
                 {
-                    $arr_prov_file[] = self::extractInfo($this->arr_file[$id]);
+                    $arr_prov_file[] = self::extractInfo(self::$arr_file[$id]);
                 }
 
                 $arr_prov_cat = array();

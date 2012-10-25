@@ -26,7 +26,7 @@ class History
     protected static $arr_hist = array();
 
     protected $str_date = null;
-    protected $arr_ids = array();
+    protected $int_id = 0;
 
     public function __construct($str_date)
     {
@@ -58,32 +58,72 @@ class History
 
 
 
-    public function addId($int_id)
+    public function setId($int_id)
     {
         if($int_id > 0)
         {
-            $this->arr_ids[] = $int_id;
+            $this->int_id = $int_id;
         }
     }
 
 
     /**
-     * @return integer
-     */
-    public function getCount()
-    {
-        return count($this->arr_ids);
-    }
-    
-    /**
-     * ID des fichiers
+     * ID du fichier
      * 
      * @access public
-     * @return array
+     * @return int
      */
-    public function getFileIds()
+    public function getFileId()
     {
-        return $this->arr_ids;
+        return $this->int_id;
+    }
+    
+    
+    protected static function getPrevNext($type, $k)
+    {
+        $pn = null;
+
+        if($type == 'prev')
+        {
+            ksort(self::$arr_hist);
+        }
+        else
+        {
+            krsort(self::$arr_hist);
+        }
+
+        foreach(self::$arr_hist as $hk => $hv)
+        {
+            if($hk == $k)
+            {
+                if(is_null($pn))
+                {
+                    return null;
+                }
+                else
+                {
+                    return self::$arr_hist[$pn]->getFileId();
+                }
+            }
+            else
+            {
+                $pn = $hk;
+            }
+        }
+
+        return null;
+    }
+    
+    public static function getPrevFor($k)
+    {
+        return self::getPrevNext('prev', $k);
+    }
+    
+    
+    
+    public static function getNextFor($k)
+    {
+        return self::getPrevNext('next', $k);
     }
 
     /**
@@ -102,16 +142,13 @@ class History
 
         foreach(self::$arr_hist as $h)
         {
-            foreach($h->getFileIds() as $id)
+            if(count($arrProv) < $n)
             {
-                if(count($arrProv) < $n)
-                {
-                    $arrProv[] = $id;
-                }
-                else
-                {
-                    break;
-                }
+                $arrProv[] = $h->getFileId();
+            }
+            else
+            {
+                break;
             }
         }
 
