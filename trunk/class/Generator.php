@@ -89,22 +89,26 @@ class Generator
                     if($f->isPost())
                     {
                         Category::set($file->getPath())->addId($f->getId());
-
-                        if(
-                            isset($f->getHeader()->date)
-                            &&
-                            preg_match('/^([0-9]{4}-[0-9]{2}-[0-9]{2}|[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2})$/', $f->getHeader()->date)
-                        )
+                        if(isset($f->getHeader()->date))
                         {
+                            if(preg_match('/^([0-9]{4}-[0-9]{2}-[0-9]{2}|[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2})$/', $f->getHeader()->date))
+                            {
 
-                            if(strlen($f->getHeader()->date) == 10)
-                            {
-                                // on met un horaire arbitraire
-                                History::set($f->getHeader()->date . ' 00:00:00')->setId($f->getId());
+                                if(strlen($f->getHeader()->date) == 10)
+                                {
+                                    // on met un horaire arbitraire
+                                    History::set($f->getHeader()->date . ' 00:00:00')->setId($f->getId());
+                                }
+                                else
+                                {
+                                    History::set($f->getHeader()->date)->setId($f->getId());
+                                }
                             }
-                            else
+                            elseif(is_integer($f->getHeader()->date))
                             {
-                                History::set($f->getHeader()->date)->setId($f->getId());
+                                // cas de la classe YAML de Symfony qui convertit la date en timestamp
+                                History::set(date('Y-m-d H:i:s', $f->getHeader()->date))->setId($f->getId());
+
                             }
                         }
                         else
