@@ -210,7 +210,15 @@ class File
     {
         if(isset($this->getHeader()->date))
         {
-            return strtotime($this->getHeader()->date);
+            if(is_integer($this->getHeader()->date))
+            {
+                // la date peut être directement un timestamp si YAML de Symfony
+                return $this->getHeader()->date;
+            }
+            else
+            {
+                return strtotime($this->getHeader()->date);
+            }
         }
         else
         {
