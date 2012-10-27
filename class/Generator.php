@@ -212,7 +212,7 @@ class Generator
             {
                 $l = new Permalink(Config::getInstance()->getPermalinkTag());
                 $l->setTitle(Permalink::createSlug($str));
-                $arr_tag[] = array(
+                $arr_tag[] = (object) array(
                     'title' => $str,
                     'url'   => $l->getUrl()
                 );
