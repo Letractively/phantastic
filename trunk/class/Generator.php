@@ -208,14 +208,37 @@ class Generator
         $arr_tag = array();
         if(isset($f->getHeader()->tags) && count($f->getHeader()->tags))
         {
+            $n = 0;
+            $tot = count($f->getHeader()->tags);
             foreach($f->getHeader()->tags as $str)
             {
+                $str_special = '';
+
+                if($n == 0)
+                {
+                    $str_special = 'first';
+                }
+                elseif($n == $tot - 1)
+                {
+                    $str_special = 'last';
+                }
+                elseif($n == $tot - 2)
+                {
+                    $str_special = 'last_but_one';
+                }
+                else
+                {
+                    $str_special = '';
+                }
                 $l = new Permalink(Config::getInstance()->getPermalinkTag());
                 $l->setTitle(Permalink::createSlug($str));
                 $arr_tag[] = (object) array(
-                    'title' => $str,
-                    'url'   => $l->getUrl()
+                    'title'     => $str,
+                    'url'       => $l->getUrl(),
+                    'position'  => $n + 1,
+                    'special'   => $str_special
                 );
+                $n++;
             }
         }
 
