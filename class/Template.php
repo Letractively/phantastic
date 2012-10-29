@@ -60,6 +60,20 @@ class Template
         );
     }
 
+
+    public function text($str_key)
+    {
+        // TODO: Je ne lève pas d’erreur, mais dans le futur, un message de log va apparaitre.
+        if(Sample::has($str_key))
+        {
+            return Sample::get($str_key)->getContent();
+        }
+        else
+        {
+            return '';
+        }
+    }
+
     public function render()
     {
         $data = (object) $this->arr_data;

@@ -100,6 +100,15 @@ class File
         return(!$this->isPost() && !$this->isPage());
     }
 
+    public function isSample()
+    {
+        return(
+            $this->isFile()
+            &&
+            preg_match('@'.Path::getSrcSample().'@', $this->obj_path->getPathname())
+        );
+    }
+
     public function getTitleSlug()
     {
         return Permalink::createSlug($this->getHeader()->title);
