@@ -32,6 +32,7 @@ class Path
     const SRC = 'src/'; // chemin par défaut des sources du site
     const DEST = 'out/'; // chemin par défaut des fichiers générés 
     const POST = 'post/'; // chemin relatif à SRC pour les Posts
+    const SAMPLE = 'sample/'; // chemin relatif à SRC pour les blocs de texte
     const TEMPLATE = 'template/'; // chemin par défaut pour les templates
     const TAGS = 'tags/'; // chemin de destination par défaut des tags
     const CATEGORIES = 'categories/'; // chemin de destination par défaut des catégories
@@ -131,6 +132,16 @@ class Path
             '%s%s',
             Config::getInstance()->getDir()->src,
             Config::getInstance()->getDir()->post
+        );
+    }
+    
+    public static function getSrcSample()
+    {
+        //TODO: sera à revoir
+        return sprintf(
+            '%s%s',
+            Config::getInstance()->getDir()->src,
+            Config::getInstance()->getDir()->sample
         );
     }
 

@@ -21,6 +21,7 @@ namespace Malenki\Phantastic;
 
 use Malenki\Phantastic\Parser as Parser;
 use DateTimeZone;
+use Exception;
 
 /**
  * La configuration du programme.
@@ -108,6 +109,7 @@ class Config
         $this->obj_dir = (object) array(
             'template' => Path::TEMPLATE,
             'post'     => Path::POST,
+            'sample'   => Path::SAMPLE,
             'src'      => Path::SRC,
             'dest'     => Path::DEST
         );
@@ -146,10 +148,20 @@ class Config
             if(isset(self::$mixed_yaml->permalink['post']))
                 $this->setPermalinkPost(self::$mixed_yaml->permalink['post']);
 
-            $this->setPostDir(self::$mixed_yaml->dir['post']);
-            $this->setSrcDir(self::$mixed_yaml->dir['src']);
-            $this->setDestDir(self::$mixed_yaml->dir['dest']);
-            $this->setTemplateDir(self::$mixed_yaml->dir['template']);
+            if(self::$mixed_yaml->dir['post'])
+                $this->setPostDir(self::$mixed_yaml->dir['post']);
+
+            if(self::$mixed_yaml->dir['sample'])
+                $this->setSampleDir(self::$mixed_yaml->dir['sample']);
+
+            if(self::$mixed_yaml->dir['src'])
+                $this->setSrcDir(self::$mixed_yaml->dir['src']);
+
+            if(self::$mixed_yaml->dir['dest'])
+                $this->setDestDir(self::$mixed_yaml->dir['dest']);
+
+            if(self::$mixed_yaml->dir['template'])
+                $this->setTemplateDir(self::$mixed_yaml->dir['template']);
             
             if(isset(self::$mixed_yaml->author))
                 $this->setAuthor(self::$mixed_yaml->author);
@@ -275,6 +287,18 @@ class Config
         else
         {
             throw new Exception('Custom posts’ directory must have a slash at the end.');
+        }
+    }
+    
+    public function setSampleDir($str)
+    {
+        if(self::basicCheck($str))
+        {
+            $this->obj_dir->sample = $str;
+        }
+        else
+        {
+            throw new Exception('Custom samples’ texts’ directory must have a slash at the end.');
         }
     }
     

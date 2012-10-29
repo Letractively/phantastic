@@ -118,11 +118,18 @@ class Generator
                     }
                     
                 }
-
+                elseif($f->isSample())
+                {
+                    Sample::set($f->getObjPath()->getBasename('.markdown'));
+                }
+                
                 $this->add($f);
+
             }
         }
     }
+
+
 
 
     public function renderTagCloud()
@@ -284,7 +291,6 @@ class Generator
         {
             if(!$f->isFile())
             {
-                //TODO: C’est probablement ici que je devrai m’occuper des next/prev…
                 $t = new Template($f->getHeader()->layout);
 
                 $arr_prov = array();
@@ -310,7 +316,7 @@ class Generator
                 $t->assign('site_meta', Config::getInstance()->getMeta());
                 file_put_contents(Path::build($f), $t->render());
             }
-            else
+            elseif(!$f->isSample())
             {
                 copy($f->getSrcPath(), Path::build($f));
             }
