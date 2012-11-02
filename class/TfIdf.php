@@ -106,15 +106,29 @@ class TfIdf
     
             $float_dist += pow(($arr_1[$str_token] - $arr_2[$str_token]), 2);
         }
+    
         return $float_dist;
     }
 
 
+    protected static function prepare($str_text)
+    {
+        $str_text = strip_tags($str_text);
+
+        $str_text = html_entity_decode($str_text, ENT_QUOTES | ENT_XHTML, 'UTF-8');
+
+        $str_text = mb_strtolower($str_text, 'UTF-8');
+
+        $str_text = trim(preg_replace('/[\s\p{P}?!¡¿;:’\*]+/iu', ' ', $str_text));
+
+        return(explode(' ', $str_text));
+    }
+
 
     public function __construct($str_text)
     {
-        $str_text = preg_replace("/([!?.,\*\"]{1})/", " \\1 ", $str_text);
-        $arr_tokens = preg_split("/\s+/", $str_text);
+        $arr_tokens = self::prepare($str_text);
+
         $int_count_tokens = count($arr_tokens);
 
         // on remplit le tableau Term Frequency

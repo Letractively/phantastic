@@ -95,6 +95,12 @@ class App
             ->setVarHelp('ADR:PORT')
         );
 
+        Options::add(
+            Arg::createValue('related_posts')
+            ->setLong('related-posts:')
+            ->setHelp('Attribue pour chaque post N posts en relation avec son contenu. Ceci peut être gourmand en calcul. Par défaut à zéro si vous ne lui donnez pas une valeur positive.')
+            ->setVarHelp('N')
+        );
 
         Options::getInstance()->setHelp('Affiche ce message d’aide.');
         Options::getInstance()->setVersion('Affiche la version de Phantastic.');
@@ -144,6 +150,11 @@ class App
             if(Options::getInstance()->has('timezone'))
             {
                 Config::getInstance()->setTimezone($opt->get('timezone'));
+            }
+            
+            if(Options::getInstance()->has('related_posts'))
+            {
+                Config::getInstance()->setTimezone($opt->get('related_posts'));
             }
             
             

@@ -64,6 +64,8 @@ class Config
 
     protected $str_author = null;
 
+    protected $int_related_posts = 0;
+
 
 
     protected static function basicCheck($str)
@@ -165,6 +167,10 @@ class Config
             
             if(isset(self::$mixed_yaml->author))
                 $this->setAuthor(self::$mixed_yaml->author);
+            
+            if(isset(self::$mixed_yaml->related_posts) && self::$mixed_yaml->related_posts > 0)
+                $this->setRelatedPosts(self::$mixed_yaml->related_posts);
+            
             
         }
     }
@@ -335,6 +341,18 @@ class Config
         else
         {
             throw new Exception('Custom destination directory must have a slash at the end.');
+        }
+    }
+
+    public function setRelatedPosts($int)
+    {
+        if($int >= 0)
+        {
+            $this->int_related_posts = $int;
+        }
+        else
+        {
+            throw new Exception('Related posts must be a positive value or 0.');
         }
     }
     
