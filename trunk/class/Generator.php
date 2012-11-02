@@ -399,7 +399,8 @@ class Generator
                 {
                     $arr_prov_cat2[] = (object) array(
                         'url' => $obj_cat->getUrl() . $str,
-                        'title' => Config::getInstance()->getCategory($str)
+                        'title' => Config::getInstance()->getCategory($str),
+                        'slug' => $str
                     );
                 }
                 
@@ -451,7 +452,8 @@ class Generator
                 {
                     $arr_last[] = (object) array(
                         'url' =>  preg_replace(sprintf('@^%s@', Path::getDest()), '', $obj_file->getPathname()), //TODO: Avoir un moyen de récupérer l’URL proprement
-                        'title' => Config::getInstance()->getCategory($obj_file->getFileName())
+                        'title' => Config::getInstance()->getCategory($obj_file->getFileName()),
+                        'slug' => $obj_file->getFileName()
                     );
                 }
             }
