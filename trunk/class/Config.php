@@ -377,6 +377,11 @@ class Config
         return $this->str_description;
     }
 
+    public function getRelatedPosts()
+    {
+        return $this->int_related_posts;
+    }
+
     public function getTimezone()
     {
         return $this->str_timezone;

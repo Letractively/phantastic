@@ -132,6 +132,33 @@ class Generator
 
 
 
+    public function attributeDistances()
+    {
+        foreach(self::$arr_file as $k => $v)
+        {
+            if($v->isPost())
+            {
+                TfIdf::set($k, $v->getContent());
+            }
+        }
+
+        foreach(self::$arr_file as $k => $v)
+        {
+            if($v->isPost())
+            {
+                foreach(self::$arr_file as $kk => $vv)
+                {
+                    if($vv->isPost())
+                    {
+                        TfIdf::addDistanceFor($k, $kk, TfIdf::distance($k, $kk));
+                    }
+                }
+            }
+        }
+    }
+
+
+
     public function renderTagCloud()
     {
         if(is_null($this->str_tag_cloud))
@@ -281,6 +308,36 @@ class Generator
         $arr_out['date_atom'] = $f->getDateAtom();
         $arr_out['canonical'] = preg_replace('@/+$@', '', Config::getInstance()->getBase()) . $f->getUrl();
         $arr_out['type'] = $f->isPost() ? 'post' : 'page';
+
+        // TODO: prendre en compte next et prev pour éviter les répétitions…
+        if($f->isPost() && Config::getInstance()->getRelatedPosts())
+        {
+            $arr_prov = TfIdf::getNearestIdsFor(
+                $f->getId(),
+                Config::getInstance()->getRelatedPosts()
+            );
+
+            $arr_prov2 = array();
+
+            foreach($arr_prov as $idNear)
+            {
+                $objNear = self::$arr_file[$idNear];
+                
+                $arr_prov3 = array();
+
+                foreach($objNear->getHeader() as $k => $v)
+                {
+                    $arr_prov3[$k] = $v;
+                }
+
+                $arr_prov3['url']       = $objNear->getUrl();
+                $arr_prov3['date']      = $objNear->getDate();
+
+                $arr_prov2[] = (object) $arr_prov3;
+            }
+
+            $arr_out['nearest'] = $arr_prov2;
+        }
 
         return (object) $arr_out;
     }
