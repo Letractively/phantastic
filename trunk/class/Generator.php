@@ -138,7 +138,34 @@ class Generator
         {
             if($v->isPost())
             {
-                TfIdf::set($k, $v->getContent());
+                $arr_plus = array();
+
+                if($v->hasCategory())
+                {
+                    foreach($v->getCategory()->getNode() as $str_node)
+                    {
+                        $arr_plus[] = Config::getInstance()->getCategory($str_node);
+                    }
+                }
+                
+                if(isset($v->getHeader()->tags) && count($v->getHeader()->tags))
+                {
+                    $arr_plus = array_merge($arr_plus, $v->getHeader()->tags);
+                }
+
+                if(isset($v->abstract) && strlen($v->abstract))
+                {
+                    $arr_plus[] = $v->abstract;
+                }
+
+                if(count($arr_plus))
+                {
+                    TfIdf::set($k, $v->getContent() . ' ' . implode(' ', $arr_plus));
+                }
+                else
+                {
+                    TfIdf::set($k, $v->getContent());
+                }
             }
         }
 
