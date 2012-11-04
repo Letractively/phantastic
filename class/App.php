@@ -180,6 +180,12 @@ class App
 
         $g = new Generator();
         $g->getData();
+
+        if(Config::getInstance()->getRelatedPosts())
+        {
+            $g->attributeDistances();
+        }
+        
         $g->render();
         
         if(!Tag::isEmpty())
@@ -191,6 +197,8 @@ class App
         {
             $g->renderCategoryPages();
         }
+
+
         //debug, test…
         //var_dump(History::getLast());
         //var_dump(Category::getTree());

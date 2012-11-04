@@ -24,13 +24,55 @@ use Exception;
 class TfIdf
 {
     protected static $arr_documents = array();
+    protected static $arr_doc_dist = array();
 
     protected $arr_tf = array();
     protected $arr_tfidf = array();
 
 
 
+    public static function addDistanceFor($int_id_1, $int_id_2, $float_dist)
+    {
+        if($int_id_1 != $int_id_2)
+        {
+            if(isset(self::$arr_doc_dist[$int_id_1]))
+            {
+                self::$arr_doc_dist[$int_id_1][$int_id_2] = $float_dist;
+            }
+            else
+            {
+                self::$arr_doc_dist[$int_id_1] = array();
+            }
+        }
+    }
 
+    public static function getDistanceFor($int_id_a, $int_id_b)
+    {
+        if($int_id_a == $int_id_b)
+        {
+            return 0;
+        }
+
+        if($int_id_a < $int_id_b)
+        {
+            $int_id_1 = $int_id_a;
+            $int_id_2 = $int_id_b;
+        }
+        else
+        {
+            $int_id_2 = $int_id_a;
+            $int_id_2 = $int_id_b;
+        }
+
+
+        return self::$arr_doc_dist[$int_id_1][$int_id_2];
+    }
+
+    public static function getNearestIdsFor($int_id, $int_count)
+    {
+        asort(self::$arr_doc_dist[$int_id]);
+        return array_slice(array_keys(self::$arr_doc_dist[$int_id]), 0, $int_count);
+    }
 
     public static function getCount()
     {
