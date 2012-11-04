@@ -61,6 +61,11 @@ class Template
     }
 
 
+    public function hasText($str_key)
+    {
+        return Sample::has($str_key);
+    }
+
     public function text($str_key)
     {
         // TODO: Je ne lève pas d’erreur, mais dans le futur, un message de log va apparaitre.
