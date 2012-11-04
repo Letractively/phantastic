@@ -153,10 +153,12 @@ class Generator
                     $arr_plus = array_merge($arr_plus, $v->getHeader()->tags);
                 }
 
-                if(isset($v->abstract) && strlen($v->abstract))
+                if(isset($v->getHeader()->abstract) && strlen($v->getHeader()->abstract))
                 {
-                    $arr_plus[] = $v->abstract;
+                    $arr_plus[] = $v->getHeader()->abstract;
                 }
+
+                $arr_plus[] = $v->getHeader()->title;
 
                 if(count($arr_plus))
                 {
