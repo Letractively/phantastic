@@ -319,8 +319,28 @@ class Generator
 
             $arr_prov2 = array();
 
+            $n = 0;
+            $tot = count($arr_prov);
             foreach($arr_prov as $idNear)
             {
+                $str_special = '';
+
+                if($n == 0)
+                {
+                    $str_special = 'first';
+                }
+                elseif($n == $tot - 1)
+                {
+                    $str_special = 'last';
+                }
+                elseif($n == $tot - 2)
+                {
+                    $str_special = 'last_but_one';
+                }
+                else
+                {
+                    $str_special = '';
+                }
                 $objNear = self::$arr_file[$idNear];
                 
                 $arr_prov3 = array();
@@ -332,8 +352,11 @@ class Generator
 
                 $arr_prov3['url']       = $objNear->getUrl();
                 $arr_prov3['date']      = $objNear->getDate();
+                $arr_prov3['position']  = $n + 1;
+                $arr_prov3['special']   = $str_special;
 
                 $arr_prov2[] = (object) $arr_prov3;
+                $n++;
             }
 
             $arr_out['nearest'] = $arr_prov2;
