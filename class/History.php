@@ -35,6 +35,7 @@ class History
 
     public static function getHist()
     {
+        krsort(self::$arr_hist);
         return self::$arr_hist;
     }
 
