@@ -403,10 +403,16 @@ class Generator
                 $t = new Template($f->getHeader()->layout);
 
                 $arr_prov = array();
+                $arr_prov2 = array();
 
                 foreach(History::getLast() as $id)
                 {
                     $arr_prov[] = self::extractInfo(self::$arr_file[$id]);
+                }
+
+                foreach(History::getHist() as $h)
+                {
+                    $arr_prov2[] = self::extractInfo(self::$arr_file[$h->getFileId()]);
                 }
 
                 foreach(self::extractInfo($f) as $k => $v)
@@ -415,6 +421,7 @@ class Generator
                 }
 
                 $t->assign('last_posts', $arr_prov);
+                $t->assign('all_last_posts', $arr_prov2);
                 $t->assign('tag_cloud', $this->renderTagCloud());
                 $t->assign('cat_list', $this->renderCatList());
                 $t->assign('root_cat_list', $this->renderRootCatList());
