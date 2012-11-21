@@ -79,6 +79,21 @@ class Template
         }
     }
 
+    public function truncate($str, $int_length, $str_end = '…')
+    {
+        if(mb_strlen($str, 'UTF-8') > $int_length)
+        {
+            $str = strip_tags($str);
+            // TODO: Convertir les entités HTML en caractère brut…
+            $int_length = $int_length - mb_strlen($str_end, 'UTF-8');
+            return mb_substr($str, 0, $int_length, 'UTF-8') . $str_end;
+        }
+        else
+        {
+            return $str;
+        }
+    }
+
     public function render()
     {
         $data = (object) $this->arr_data;

@@ -519,7 +519,9 @@ class Generator
                         'slug' => $str
                     );
                 }
-                
+
+                $arr_slug_full = explode('/', $str_slug); 
+                $t->assign('slug', array_pop($arr_slug_full));
                 $t->assign('posts', $arr_prov_file);
                 $t->assign('cats', $arr_prov_cat2);
                 $t->assign('tag_cloud', $this->renderTagCloud());
@@ -586,7 +588,11 @@ class Generator
                 {
                     $t->assign('title', null);
                 }
+
+                $arr_slug_full = explode('/', $str_slug_cat);
+                //var_dump($arr_slug_full);
                 $t->assign('posts', array());
+                $t->assign('slug', array_pop($arr_slug_full));
                 $t->assign('cats', $arr_last);
                 $t->assign('tag_cloud', $this->renderTagCloud());
                 $t->assign('cat_list', $this->renderCatList());
