@@ -157,7 +157,14 @@ class TfIdf
     {
         $str_text = strip_tags($str_text);
 
-        $str_text = html_entity_decode($str_text, ENT_QUOTES | ENT_XHTML, 'UTF-8');
+        if(phpversion() < '5.4.0')
+        {
+            $str_text = html_entity_decode($str_text, ENT_QUOTES, 'UTF-8');
+        }
+        else
+        {
+            $str_text = html_entity_decode($str_text, ENT_QUOTES | ENT_XHTML, 'UTF-8');
+        }
 
         $str_text = mb_strtolower($str_text, 'UTF-8');
 
