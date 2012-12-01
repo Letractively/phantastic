@@ -48,6 +48,8 @@ class Config
     
     protected $str_timezone = 'UTC';
     
+    protected $str_language = null;
+    
     protected $str_server = Server::HOST;
 
     protected $arr_categories = null;
@@ -129,6 +131,9 @@ class Config
 
             if(isset(self::$mixed_yaml->timezone))
                 $this->setTimezone(self::$mixed_yaml->timezone);
+
+            if(isset(self::$mixed_yaml->language))
+                $this->setLanguage(self::$mixed_yaml->language);
 
             // si server actif, désactive l’URL de base pour avoir une 
             // navigation fonctionnnelle
@@ -246,9 +251,35 @@ class Config
         }
         else
         {
-            throw new Exception('Timezone définie incorrecte.');
+            throw new Exception('Timezone is not valid.');
         }
     }
+
+
+
+    public function setLanguage($str)
+    {
+        if(!is_string($str))
+        {
+            throw new Exception('Language must be a string.');
+        }
+
+        $str = trim($str);
+
+        if(strlen($str) != 2)
+        {
+            throw new Exception('Language must be given into ISO 639-1 format.');
+        }
+
+        if(preg_match('/[0-9]/', $str))
+        {
+            throw new Exception('Not valid ISO 639-1 language format.');
+        }
+
+        $this->str_language = strtolower($str);
+    }
+
+
 
     public function setCategories($arr)
     {
@@ -385,6 +416,11 @@ class Config
     public function getTimezone()
     {
         return $this->str_timezone;
+    }
+
+    public function getLanguage()
+    {
+        return $this->str_language;
     }
 
     public function getServer()
