@@ -23,6 +23,7 @@ use Exception;
 
 class TfIdf
 {
+    protected static $arr_stop_words = array();
     protected static $arr_documents = array();
     protected static $arr_doc_dist = array();
 
@@ -30,6 +31,20 @@ class TfIdf
     protected $arr_tfidf = array();
 
 
+    public static function loadStopWordsFile($str_file_stop_words)
+    {
+        $str_stop_words = file_get_contents($str_file_stop_words);
+
+        foreach(explode("\n", $str_stop_words) as $str_word)
+        {
+            $str_word = trim($str_word);
+
+            if(strlen($str_word))
+            {
+                self::$arr_stop_words[] = $str_word;
+            }
+        }
+    }
 
     public static function addDistanceFor($int_id_1, $int_id_2, $float_dist)
     {
@@ -183,13 +198,16 @@ class TfIdf
         // on remplit le tableau Term Frequency
         foreach($arr_tokens as $str_token)
         {
-            if(isset($this->arr_tf[$str_token]))
+            if(!in_array($str_token, self::$arr_stop_words))
             {
-                $this->arr_tf[$str_token]++;
-            }
-            else
-            {
-                $this->arr_tf[$str_token] = 1;
+                if(isset($this->arr_tf[$str_token]))
+                {
+                    $this->arr_tf[$str_token]++;
+                }
+                else
+                {
+                    $this->arr_tf[$str_token] = 1;
+                }
             }
         }
 

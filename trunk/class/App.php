@@ -67,6 +67,14 @@ class App
         );
 
         Options::add(
+            Arg::createValue('language')
+            ->setShort('l:')
+            ->setLong('language:')
+            ->setHelp('Langue principale de rédaction du site. La langue doit être précisée au format 2 lettre, exemple : « FR » pour français, « EN » pour anglais, etc.')
+            ->setVarHelp('LANG')
+        );
+
+        Options::add(
             Arg::createValue('config')
             ->setShort('c::')
             ->setLong('config::')
@@ -162,6 +170,11 @@ class App
             {
                 Config::getInstance()->setServer($opt->get('server'));
             }
+            
+            if(Options::getInstance()->has('language'))
+            {
+                Config::getInstance()->setServer($opt->get('language'));
+            }
         }
     }
 
@@ -183,6 +196,19 @@ class App
 
         if(Config::getInstance()->getRelatedPosts())
         {
+            if(Config::getInstance()->getLanguage())
+            {
+                $str_file_stop_words = sprintf(
+                    '%sdata/%s.txt',
+                    Path::getAppRoot(),
+                    Config::getInstance()->getLanguage()
+                );
+
+                if(file_exists($str_file_stop_words))
+                {
+                    TfIdf::loadStopWordsFile($str_file_stop_words);
+                }
+            }
             $g->attributeDistances();
         }
         
