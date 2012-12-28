@@ -98,14 +98,19 @@ class Template
     {
         $data = (object) $this->arr_data;
 
-        ob_start();
-        require(
-            sprintf(
-                '%s%s.phtml',
-                Config::getInstance()->getDir()->template,
-                $this->str_tmpl
-            )
+        $str_file = sprintf(
+            '%s%s.phtml',
+            Config::getInstance()->getDir()->template,
+            $this->str_tmpl
         );
+
+        if(!file_exists($str_file))
+        {
+            throw new \Exception(sprintf('File %s does not exist! Rendering abort.', $str_file));
+        }
+
+        ob_start();
+        require($str_file);
         $content = ob_get_contents();
         ob_end_clean();
 

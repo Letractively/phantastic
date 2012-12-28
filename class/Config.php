@@ -68,6 +68,9 @@ class Config
 
     protected $int_related_posts = 0;
 
+    protected $bool_disable_tags = false;
+    
+    protected $bool_disable_categories = false;
 
 
     protected static function basicCheck($str)
@@ -173,6 +176,12 @@ class Config
             if(isset(self::$mixed_yaml->author))
                 $this->setAuthor(self::$mixed_yaml->author);
             
+            if(isset(self::$mixed_yaml->disabletags))
+                $this->setDisableTags();
+            
+            if(isset(self::$mixed_yaml->disablecategories))
+                $this->setDisableCategories();
+            
             if(isset(self::$mixed_yaml->related_posts) && self::$mixed_yaml->related_posts > 0)
                 $this->setRelatedPosts(self::$mixed_yaml->related_posts);
             
@@ -202,6 +211,15 @@ class Config
         $this->str_author = $str;
     }
 
+    public function setDisableTags()
+    {
+        $this->bool_disable_tags = true;
+    }
+
+    public function setDisableCategories()
+    {
+        $this->bool_disable_categories = true;
+    }
 
 
     public function setName($str)
@@ -390,6 +408,16 @@ class Config
     public function getAuthor()
     {
         return $this->str_author;
+    }
+
+    public function getDisableTags()
+    {
+        return $this->bool_disable_tags;
+    }
+
+    public function getDisableCategories()
+    {
+        return $this->bool_disable_categories;
     }
 
 

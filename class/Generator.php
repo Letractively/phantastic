@@ -190,11 +190,14 @@ class Generator
 
     public function renderTagCloud()
     {
-        if(is_null($this->str_tag_cloud))
+        if(!Config::getInstance()->getDisableTags())
         {
-            $t = new Template(Template::TAGS);
-            $t->assign('tags', Tag::getCloud());
-            $this->str_tag_cloud = $t->render();
+            if(is_null($this->str_tag_cloud))
+            {
+                $t = new Template(Template::TAGS);
+                $t->assign('tags', Tag::getCloud());
+                $this->str_tag_cloud = $t->render();
+            }
         }
 
         return $this->str_tag_cloud;
@@ -202,11 +205,14 @@ class Generator
 
     public function renderCatList()
     {
-        if(is_null($this->str_cat_list))
+        if(!Config::getInstance()->getDisableCategories())
         {
-            $t = new Template(Template::CATEGORIES);
-            $t->assign('categories', Category::getHier());
-            $this->str_cat_list = $t->render();
+            if(is_null($this->str_cat_list))
+            {
+                $t = new Template(Template::CATEGORIES);
+                $t->assign('categories', Category::getHier());
+                $this->str_cat_list = $t->render();
+            }
         }
 
         return $this->str_cat_list;
@@ -214,23 +220,26 @@ class Generator
     
     public function renderRootCatList()
     {
-        $arr_prov = array();
-
-        foreach(Category::getHier() as $c)
+        if(!Config::getInstance()->getDisableCategories())
         {
-            if(!in_array($c->getRootParent()->getName(), $arr_prov))
+            $arr_prov = array();
+
+            foreach(Category::getHier() as $c)
             {
-                $arr_prov[$c->getRootParent()->getName()] = $c->getRootParent();
+                if(!in_array($c->getRootParent()->getName(), $arr_prov))
+                {
+                    $arr_prov[$c->getRootParent()->getName()] = $c->getRootParent();
+                }
             }
-        }
 
-        ksort($arr_prov);
+            ksort($arr_prov);
 
-        if(is_null($this->str_root_cat_list))
-        {
-            $t = new Template(Template::ROOT_CATEGORIES);
-            $t->assign('root_categories', $arr_prov);
-            $this->str_root_cat_list = $t->render();
+            if(is_null($this->str_root_cat_list))
+            {
+                $t = new Template(Template::ROOT_CATEGORIES);
+                $t->assign('root_categories', $arr_prov);
+                $this->str_root_cat_list = $t->render();
+            }
         }
 
 
@@ -441,20 +450,37 @@ class Generator
 
     public function renderTagPages()
     {
-        foreach(Tag::getCloud() as $tag)
+        if(!Config::getInstance()->getDisableTags())
         {
-            $t = new Template(Template::TAG_PAGE);
-            $t->assign('title', $tag->getName());
-
-
-            $arr_prov = array();
-
-            foreach($tag->getFileIds() as $id)
+            foreach(Tag::getCloud() as $tag)
             {
-                $arr_prov[] = self::extractInfo(self::$arr_file[$id]);
+                $t = new Template(Template::TAG_PAGE);
+                $t->assign('title', $tag->getName());
+
+
+                $arr_prov = array();
+
+                foreach($tag->getFileIds() as $id)
+                {
+                    $arr_prov[] = self::extractInfo(self::$arr_file[$id]);
+                }
+
+                $t->assign('posts', $arr_prov);
+                $t->assign('tag_cloud', $this->renderTagCloud());
+                $t->assign('cat_list', $this->renderCatList());
+                $t->assign('root_cat_list', $this->renderRootCatList());
+                $t->assign('site_name', Config::getInstance()->getName());
+                $t->assign('site_description', Config::getInstance()->getDescription());
+                $t->assign('site_base', Config::getInstance()->getBase());
+                $t->assign('site_meta', Config::getInstance()->getMeta());
+
+                file_put_contents(Path::build($tag), $t->render());
             }
 
-            $t->assign('posts', $arr_prov);
+
+
+            $t = new Template(Template::TAG_INDEX);
+
             $t->assign('tag_cloud', $this->renderTagCloud());
             $t->assign('cat_list', $this->renderCatList());
             $t->assign('root_cat_list', $this->renderRootCatList());
@@ -462,150 +488,139 @@ class Generator
             $t->assign('site_description', Config::getInstance()->getDescription());
             $t->assign('site_base', Config::getInstance()->getBase());
             $t->assign('site_meta', Config::getInstance()->getMeta());
-            
-            file_put_contents(Path::build($tag), $t->render());
+
+            file_put_contents(Path::buildForRootTag(), $t->render());
+
         }
-
-
-
-        $t = new Template(Template::TAG_INDEX);
-
-        $t->assign('tag_cloud', $this->renderTagCloud());
-        $t->assign('cat_list', $this->renderCatList());
-        $t->assign('root_cat_list', $this->renderRootCatList());
-        $t->assign('site_name', Config::getInstance()->getName());
-        $t->assign('site_description', Config::getInstance()->getDescription());
-        $t->assign('site_base', Config::getInstance()->getBase());
-        $t->assign('site_meta', Config::getInstance()->getMeta());
-        
-        file_put_contents(Path::buildForRootTag(), $t->render());
-
     }
 
     public function renderCategoryPages()
     {
-        $arr_tree = Category::getTree();
-        
-        foreach(Category::getHier() as $str_slug => $obj_cat)
+        if(!Config::getInstance()->getDisableCategories())
         {
-            if($str_slug != '/') // cas particulier des articles sans catégorie
+            $arr_tree = Category::getTree();
+
+            foreach(Category::getHier() as $str_slug => $obj_cat)
             {
-                $t = new Template(Template::CATEGORY_PAGE);
-                $t->assign('title', $obj_cat->getName());
-
-                $arr_prov_file = array();
-
-                foreach($obj_cat->getFileIds() as $id)
+                if($str_slug != '/') // cas particulier des articles sans catégorie
                 {
-                    $arr_prov_file[] = self::extractInfo(self::$arr_file[$id]);
+                    $t = new Template(Template::CATEGORY_PAGE);
+                    $t->assign('title', $obj_cat->getName());
+
+                    $arr_prov_file = array();
+
+                    foreach($obj_cat->getFileIds() as $id)
+                    {
+                        $arr_prov_file[] = self::extractInfo(self::$arr_file[$id]);
+                    }
+
+                    $arr_prov_cat = array();
+
+                    foreach($obj_cat->getNode() as $str_node)
+                    {
+                        $arr_prov_cat[] = sprintf('["%s"]', $str_node);
+                    }
+
+                    $arr_prov_cat = array_keys(eval(sprintf('return $arr_tree%s;', implode('', $arr_prov_cat))));
+
+                    $arr_prov_cat2 = array();
+
+                    foreach($arr_prov_cat as $str)
+                    {
+                        $arr_prov_cat2[] = (object) array(
+                            'url' => $obj_cat->getUrl() . $str,
+                            'title' => Config::getInstance()->getCategory($str),
+                            'slug' => $str
+                        );
+                    }
+
+                    $arr_slug_full = explode('/', $str_slug); 
+                    $t->assign('slug', array_pop($arr_slug_full));
+                    $t->assign('posts', $arr_prov_file);
+                    $t->assign('cats', $arr_prov_cat2);
+                    $t->assign('tag_cloud', $this->renderTagCloud());
+                    $t->assign('cat_list', $this->renderCatList());
+                    $t->assign('root_cat_list', $this->renderRootCatList());
+                    $t->assign('site_name', Config::getInstance()->getName());
+                    $t->assign('site_description', Config::getInstance()->getDescription());
+                    $t->assign('site_base', Config::getInstance()->getBase());
+                    $t->assign('site_meta', Config::getInstance()->getMeta());
+
+                    file_put_contents(Path::build($obj_cat), $t->render());
+                }
+            }
+
+            $arr_dir = array();
+
+            $obj_iter = new RecursiveDirectoryIterator(Path::getDestCategory(), RecursiveDirectoryIterator::KEY_AS_PATHNAME);
+            foreach(new RecursiveIteratorIterator($obj_iter, RecursiveIteratorIterator::CHILD_FIRST) as $file)
+            {
+                if($file->isDir())
+                {
+                    if(!in_array(dirname($file->__toString()), $arr_dir))
+                    {
+                        $arr_dir[] = dirname($file->__toString());
+                    }
+                }
+            }
+
+
+            foreach($arr_dir as $str_dir)
+            {
+                $obj_dir_iter = new DirectoryIterator($str_dir);
+
+                $bool_has_index = false;
+
+                $arr_last = array();
+
+                foreach($obj_dir_iter as $obj_file)
+                {
+                    if($obj_file->isFile() && ($obj_file->getFileName() == 'index.html'))
+                    {
+                        $bool_has_index = true;
+                    }
+
+                    if($obj_file->isDir() && !$obj_file->isDot())
+                    {
+                        $arr_last[] = (object) array(
+                            'url' =>  preg_replace(sprintf('@^%s@', Path::getDest()), '', $obj_file->getPathname()), //TODO: Avoir un moyen de récupérer l’URL proprement
+                            'title' => Config::getInstance()->getCategory($obj_file->getFileName()),
+                            'slug' => $obj_file->getFileName()
+                        );
+                    }
                 }
 
-                $arr_prov_cat = array();
-
-                foreach($obj_cat->getNode() as $str_node)
+                if(!$bool_has_index)
                 {
-                    $arr_prov_cat[] = sprintf('["%s"]', $str_node);
+                    $str_slug_cat = preg_replace(sprintf('@^%s@', Path::getDestCategory()), '', $str_dir);
+                    $t = new Template(Template::CATEGORY_PAGE);
+                    if(Config::getInstance()->hasCategory($str_slug_cat))
+                    {
+                        $t->assign('title', Config::getInstance()->getCategory($str_slug_cat));
+                    }
+                    else
+                    {
+                        $t->assign('title', null);
+                    }
+
+                    $arr_slug_full = explode('/', $str_slug_cat);
+                    //var_dump($arr_slug_full);
+                    $t->assign('posts', array());
+                    $t->assign('slug', array_pop($arr_slug_full));
+                    $t->assign('cats', $arr_last);
+                    $t->assign('tag_cloud', $this->renderTagCloud());
+                    $t->assign('cat_list', $this->renderCatList());
+                    $t->assign('root_cat_list', $this->renderRootCatList());
+                    $t->assign('site_name', Config::getInstance()->getName());
+                    $t->assign('site_description', Config::getInstance()->getDescription());
+                    $t->assign('site_base', Config::getInstance()->getBase());
+                    $t->assign('site_meta', Config::getInstance()->getMeta());
+
+                    file_put_contents(Path::buildForEmptyCategory($str_dir), $t->render());
                 }
-
-                $arr_prov_cat = array_keys(eval(sprintf('return $arr_tree%s;', implode('', $arr_prov_cat))));
-
-                $arr_prov_cat2 = array();
-
-                foreach($arr_prov_cat as $str)
-                {
-                    $arr_prov_cat2[] = (object) array(
-                        'url' => $obj_cat->getUrl() . $str,
-                        'title' => Config::getInstance()->getCategory($str),
-                        'slug' => $str
-                    );
-                }
-
-                $arr_slug_full = explode('/', $str_slug); 
-                $t->assign('slug', array_pop($arr_slug_full));
-                $t->assign('posts', $arr_prov_file);
-                $t->assign('cats', $arr_prov_cat2);
-                $t->assign('tag_cloud', $this->renderTagCloud());
-                $t->assign('cat_list', $this->renderCatList());
-                $t->assign('root_cat_list', $this->renderRootCatList());
-                $t->assign('site_name', Config::getInstance()->getName());
-                $t->assign('site_description', Config::getInstance()->getDescription());
-                $t->assign('site_base', Config::getInstance()->getBase());
-                $t->assign('site_meta', Config::getInstance()->getMeta());
-
-                file_put_contents(Path::build($obj_cat), $t->render());
             }
         }
 
-        $arr_dir = array();
 
-        $obj_iter = new RecursiveDirectoryIterator(Path::getDestCategory(), RecursiveDirectoryIterator::KEY_AS_PATHNAME);
-        foreach(new RecursiveIteratorIterator($obj_iter, RecursiveIteratorIterator::CHILD_FIRST) as $file)
-        {
-            if($file->isDir())
-            {
-                if(!in_array(dirname($file->__toString()), $arr_dir))
-                {
-                    $arr_dir[] = dirname($file->__toString());
-                }
-            }
-        }
-
-        
-        foreach($arr_dir as $str_dir)
-        {
-            $obj_dir_iter = new DirectoryIterator($str_dir);
-
-            $bool_has_index = false;
-
-            $arr_last = array();
-
-            foreach($obj_dir_iter as $obj_file)
-            {
-                if($obj_file->isFile() && ($obj_file->getFileName() == 'index.html'))
-                {
-                    $bool_has_index = true;
-                }
-
-                if($obj_file->isDir() && !$obj_file->isDot())
-                {
-                    $arr_last[] = (object) array(
-                        'url' =>  preg_replace(sprintf('@^%s@', Path::getDest()), '', $obj_file->getPathname()), //TODO: Avoir un moyen de récupérer l’URL proprement
-                        'title' => Config::getInstance()->getCategory($obj_file->getFileName()),
-                        'slug' => $obj_file->getFileName()
-                    );
-                }
-            }
-
-            if(!$bool_has_index)
-            {
-                $str_slug_cat = preg_replace(sprintf('@^%s@', Path::getDestCategory()), '', $str_dir);
-                $t = new Template(Template::CATEGORY_PAGE);
-                if(Config::getInstance()->hasCategory($str_slug_cat))
-                {
-                    $t->assign('title', Config::getInstance()->getCategory($str_slug_cat));
-                }
-                else
-                {
-                    $t->assign('title', null);
-                }
-
-                $arr_slug_full = explode('/', $str_slug_cat);
-                //var_dump($arr_slug_full);
-                $t->assign('posts', array());
-                $t->assign('slug', array_pop($arr_slug_full));
-                $t->assign('cats', $arr_last);
-                $t->assign('tag_cloud', $this->renderTagCloud());
-                $t->assign('cat_list', $this->renderCatList());
-                $t->assign('root_cat_list', $this->renderRootCatList());
-                $t->assign('site_name', Config::getInstance()->getName());
-                $t->assign('site_description', Config::getInstance()->getDescription());
-                $t->assign('site_base', Config::getInstance()->getBase());
-                $t->assign('site_meta', Config::getInstance()->getMeta());
-
-                file_put_contents(Path::buildForEmptyCategory($str_dir), $t->render());
-            }
-        }
-
-        
     }
 }

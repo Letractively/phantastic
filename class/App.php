@@ -109,6 +109,19 @@ class App
             ->setHelp('Attribue pour chaque post N posts en relation avec son contenu. Ceci peut être gourmand en calcul. Par défaut à zéro si vous ne lui donnez pas une valeur positive.')
             ->setVarHelp('N')
         );
+        
+        
+        Options::add(
+            Arg::createSwitch('disabletags')
+            ->setLong('disable-tags')
+            ->setHelp('Désactive le rendu des tags, que ce soit leurs pages dédiées ou le nuage de tags.')
+        );
+
+        Options::add(
+            Arg::createSwitch('disablecategories')
+            ->setLong('disable-categories')
+            ->setHelp('Désactive le rendu des catégories.')
+        );
 
         Options::getInstance()->setHelp('Affiche ce message d’aide.');
         Options::getInstance()->setVersion('Affiche la version de Phantastic.');
@@ -174,6 +187,16 @@ class App
             if(Options::getInstance()->has('language'))
             {
                 Config::getInstance()->setServer($opt->get('language'));
+            }
+            
+            if(Options::getInstance()->has('disabletags'))
+            {
+                Config::getInstance()->setDisableTags();
+            }
+
+            if(Options::getInstance()->has('disablecats'))
+            {
+                Config::getInstance()->setDisableCategories();
             }
         }
     }
