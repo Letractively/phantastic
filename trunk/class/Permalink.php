@@ -159,7 +159,7 @@ class Permalink
             $str = preg_replace(sprintf('/%s/', $k), $v, $str);
         }
 
-        $str = preg_replace('/[^a-z]+/', '-', trim($str));
+        $str = preg_replace('/[^a-z0-9]+/', '-', trim($str));
         $str = trim($str, '-');
 
         return $str;	
