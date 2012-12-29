@@ -214,6 +214,18 @@ class App
     {
         date_default_timezone_set(Config::getInstance()->getTimezone());
 
+        if(Config::getInstance()->getLanguage())
+        {
+            $str_lang = Config::getInstance()->getLanguage();
+
+            // Available language are here.
+            // TODO: ca, cz, da, de, el, en, eo, es, eu, fi, hu, it, nl, no, pt, ro, ru, sv
+            if($str_lang == 'fr')
+            {
+                setlocale(LC_ALL, 'fr_FR.utf8','fra', 'fr_FR.utf-8', 'fr_FR');
+            }
+        }
+
         $g = new Generator();
         $g->getData();
 
